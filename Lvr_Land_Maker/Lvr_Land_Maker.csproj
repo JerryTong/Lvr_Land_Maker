@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="Models\Enum\SaleType.cs" />
     <Compile Include="Models\LandFileDetailInfo.cs" />
+    <Compile Include="Process.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
