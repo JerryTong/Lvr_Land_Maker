@@ -17,9 +17,20 @@ namespace Lvr_Land_Maker
             InitializeComponent();
         }
 
-        private void label1_DragDrop(object sender, DragEventArgs e)
+        public void Start(List<string> filesPath)
         {
-            ////
+            Process process = new Process();
+            foreach (var path in filesPath)
+            { 
+                process.LandMakerProcess(path);
+            }
+        }
+
+        private async void label1_DragDrop(object sender, DragEventArgs e)
+        {
+            List<string> filePath = ((string[])e.Data.GetData(DataFormats.FileDrop)).ToList();
+            richTextBox1.Clear();
+            await Task.Run(() => { this.Start(filePath); });
         }
 
         private void label1_DragEnter(object sender, DragEventArgs e)

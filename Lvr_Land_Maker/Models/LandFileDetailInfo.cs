@@ -1,6 +1,7 @@
 ﻿using Lvr_Land_Maker.Models.Enum;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,5 +32,7 @@ namespace Lvr_Land_Maker.Models
 
         [XmlElement("Township")]
         public string Townships { get; set; }
+
+        public DataTable LandCollectionTable { get; set; }
     }
 }

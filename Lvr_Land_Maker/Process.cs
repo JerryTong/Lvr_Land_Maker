@@ -1,4 +1,6 @@
 ﻿using Lvr_Land_Maker.BLL;
+using Lvr_Land_Maker.DAL;
+using Lvr_Land_Maker.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,21 +12,21 @@ namespace Lvr_Land_Maker
 {
     public class Process
     {
-        private DataTable DataBaseTableFormat = null;
+        private DataTable dataBaseTableFormat = null;
 
         public Process()
         {
-            if (DataBaseTableFormat == null)
+            if (dataBaseTableFormat == null)
             {
-                DataBaseTableFormat = LandMakerHelper.CreateLandColumnDataTable();
+                dataBaseTableFormat = LandMakerHelper.CreateLandColumnDataTable();
             }
-
-            
         }
 
-        public void LandMakerProcess(string filesPath)
+        public void LandMakerProcess(string filePath)
         {
-
+            LandFileDetailInfo LandDetail = new LandFileDetailInfo();
+            LandDetail = LandMakerHelper.GetLandXmlFileDetailInfo(filePath);
+            LandDetail.LandCollectionTable = LandMakerDA.GetLvrLandInfo(filePath);
         }
     }
 }

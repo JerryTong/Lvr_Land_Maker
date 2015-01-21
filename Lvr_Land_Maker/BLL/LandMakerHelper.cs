@@ -1,7 +1,10 @@
-﻿using Lvr_Land_Maker.Models;
+﻿using Lvr_Land_Maker.DAL;
+using Lvr_Land_Maker.Models;
+using Lvr_Land_Maker.Models.Enum;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,8 +83,40 @@ namespace Lvr_Land_Maker.BLL
                 return null;
             }
 
+            var taiwanlocationInfo = LandMakerDA.GetLocationInfo();
 
-            return null;
+            string withoutFileName = Path.GetFileNameWithoutExtension(fileName);
+            string cityCode = withoutFileName.Substring(0, 1);
+            var detail = taiwanlocationInfo.Where(t => t.CityCode == cityCode).FirstOrDefault();
+            if (detail == null)
+            {
+                detail = new LandFileDetailInfo
+                {
+                    CityCode = "-1",
+                    CityName = "None"
+                };
+            }
+
+            detail.FileName = withoutFileName;
+            detail.SaleType = ConvertSaleType(withoutFileName.Substring(withoutFileName.Length - 1, 1));
+
+            return detail;
+        }
+
+
+        private static SaleType ConvertSaleType(string value)
+        {
+            switch (value.ToUpper())
+            {
+                case "A":
+                    return SaleType.Sale;
+                case "B":
+                    return SaleType.PreOrder;
+                case "C":
+                    return SaleType.Leasing;
+                default:
+                    return SaleType.none;
+            }
         }
     }
 }
