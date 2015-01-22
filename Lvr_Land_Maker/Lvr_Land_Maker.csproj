@@ -50,13 +50,21 @@
   <ItemGroup>
     <Compile Include="BLL\LandMakerHelper.cs" />
     <Compile Include="DAL\LandMakerDA.cs" />
+    <Compile Include="BLL\Logger.cs" />
+    <Compile Include="Extension\RickTextBoxExtension.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Enum\BuildsType.cs" />
+    <Compile Include="Models\Enum\CarType.cs" />
+    <Compile Include="Models\Enum\MaterialsType.cs" />
+    <Compile Include="Models\Enum\PartitionType.cs" />
     <Compile Include="Models\Enum\SaleType.cs" />
+    <Compile Include="Models\Enum\SubjectType.cs" />
+    <Compile Include="Models\Enum\UsingType.cs" />
     <Compile Include="Models\LandFileDetailInfo.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="Program.cs" />
