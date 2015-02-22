@@ -14,6 +14,8 @@ namespace Lvr_Land_Maker.BLL
 {
     public class LandMakerHelper
     {
+        private static List<LandFileDetailInfo> taiwanLocationInfo = null;
+
         /// <summary>
         /// Create Land column data table.
         /// </summary>
@@ -77,6 +79,11 @@ namespace Lvr_Land_Maker.BLL
             return source;
         }
 
+        /// <summary>
+        /// 取得指定實價登錄檔案區域資料。
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public static LandFileDetailInfo GetLandXmlFileDetailInfo(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
@@ -84,24 +91,27 @@ namespace Lvr_Land_Maker.BLL
                 return null;
             }
 
-            var taiwanlocationInfo = LandMakerDA.GetLocationInfo();
-
+            if (taiwanLocationInfo == null)
+            {
+                taiwanLocationInfo = LandMakerDA.GetLocationInfo();
+            }
+           
             string withoutFileName = Path.GetFileNameWithoutExtension(fileName);
             string cityCode = withoutFileName.Substring(0, 1);
-            var detail = taiwanlocationInfo.Where(t => t.CityCode == cityCode).FirstOrDefault();
-            if (detail == null)
+            var locationDetail = taiwanLocationInfo.Where(t => t.CityCode == cityCode).FirstOrDefault();
+            if (locationDetail == null)
             {
-                detail = new LandFileDetailInfo
+                locationDetail = new LandFileDetailInfo
                 {
                     CityCode = "-1",
                     CityName = "None"
                 };
             }
 
-            detail.FileName = withoutFileName;
-            detail.SaleType = ConvertSaleType(withoutFileName.Substring(withoutFileName.Length - 1, 1));
+            locationDetail.FileName = withoutFileName;
+            locationDetail.SaleType = ConvertSaleType(withoutFileName.Substring(withoutFileName.Length - 1, 1));
 
-            return detail;
+            return locationDetail;
         }
 
         /// <summary>

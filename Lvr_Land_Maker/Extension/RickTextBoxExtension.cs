@@ -67,5 +67,13 @@ namespace Lvr_Land_Maker.Extension
                 richTextBox.SelectionColor = richTextBox.ForeColor;
             }));
         }
+
+        public static void ClearSync(this RichTextBox richTextBox)
+        {
+            richTextBox.Invoke(new Action(() =>
+            {
+                richTextBox.Clear();
+            }));
+        }
     }
 }

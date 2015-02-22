@@ -51,6 +51,7 @@
     <Compile Include="BLL\LandMakerHelper.cs" />
     <Compile Include="DAL\LandMakerDA.cs" />
     <Compile Include="BLL\Logger.cs" />
+    <Compile Include="Extension\ProgressBarExtension.cs" />
     <Compile Include="Extension\RickTextBoxExtension.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

@@ -24,7 +24,7 @@ namespace Lvr_Land_Maker.DAL
         }
 
         /// <summary>
-        /// 取得指定路徑之內政部實價登入檔。
+        /// 取得指定路徑之內政部實價登錄資料。
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>

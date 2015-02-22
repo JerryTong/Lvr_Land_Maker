@@ -14,6 +14,8 @@ namespace Lvr_Land_Maker
 {
     public partial class MainForm : Form
     {
+        List<Logger> resultLogger = null;
+
         public MainForm()
         {
             InitializeComponent();
@@ -21,18 +23,20 @@ namespace Lvr_Land_Maker
 
         public void Start(List<string> filesPath)
         {
+            resultLogger = new List<Logger>();
             Process process = new Process();
-         
+            
             foreach (var path in filesPath)
             {
+                Logger result = null;
                 try
                 {
-                    var result = process.LandMakerProcess(path);
+                    result = process.LandMakerProcess(path);
                     AppendLoggerMsg(result);
                 }
                 catch (Exception ex)
                 {
-                    var exceptionReesult = new Logger
+                    result = new Logger
                     {
                         Type = LoggerType.Exception,
                         Message = ex.Message,
@@ -40,11 +44,23 @@ namespace Lvr_Land_Maker
                         Path = path,
                     };
 
-                    AppendLoggerMsg(exceptionReesult);
+
+                    AppendLoggerMsg(result);
+                }
+                finally
+                {
+                    resultLogger.Add(result);
+                    progressBar1.SetValueAsyc(progressBar1.Value + 1);
                 }
             }
+
+            this.ShowLoggerMessageRichTextBoxContent(resultLogger, 0);
         }
 
+        /// <summary>
+        /// 訊息顯示於RichTextBox。
+        /// </summary>
+        /// <param name="logger"></param>
         private void AppendLoggerMsg(Logger logger)
         {
             switch (logger.Type)
@@ -74,13 +90,47 @@ namespace Lvr_Land_Maker
             }
 
             richTextBox1.AppendTextAsync("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n", Color.Black);
-        } 
+        }
+
+        /// <summary>
+        /// 選定特定LOG訊息(Error,DataError, Message.)，並顯示於RichTextBox。
+        /// </summary>
+        /// <param name="loggers"></param>
+        /// <param name="showType">0:All , 1:Error Msg , 2:Data Msg</param>
+        private void ShowLoggerMessageRichTextBoxContent(List<Logger> loggers, int showType)
+        {
+            richTextBox1.ClearSync();
+            IEnumerable<Logger> tmpLogger = new List<Logger>();
+            switch (showType)
+            {
+                case 0:
+                    //// Error. DataError. Message.
+                    tmpLogger = loggers.OrderBy(l => l.Type);
+                    break;
+                case 1:
+                    tmpLogger = loggers.Where(l => l.Type == LoggerType.Exception);
+                    break;
+                case 2:
+                    tmpLogger = loggers.Where(l => l.Type == LoggerType.DataException);
+                    break;
+            }
+
+            tmpLogger.ToList().ForEach(
+                t =>
+                {
+                    AppendLoggerMsg(t);
+                });
+        }
 
         private async void label1_DragDrop(object sender, DragEventArgs e)
         {
             List<string> filePath = ((string[])e.Data.GetData(DataFormats.FileDrop)).ToList();
             this.toolStripButtonHide_Click(null, null);
             richTextBox1.Clear();
+
+            ////Progress Bar
+            progressBar1.Maximum = filePath.Count;
+            progressBar1.Value = 0;
 
             await Task.Run(() => { this.Start(filePath); });
         }
@@ -111,16 +161,19 @@ namespace Lvr_Land_Maker
         private void toolStripButtonAllList_Click(object sender, EventArgs e)
         {
             ////
+            this.ShowLoggerMessageRichTextBoxContent(resultLogger, 0);
         }
 
         private void toolStripButtonErrorList_Click(object sender, EventArgs e)
         {
             ////
+            this.ShowLoggerMessageRichTextBoxContent(resultLogger, 1);
         }
 
         private void toolStripButtonDataList_Click(object sender, EventArgs e)
         {
             ////
+            this.ShowLoggerMessageRichTextBoxContent(resultLogger, 2);
         }
 
         private void toolStripButtonCopy_Click(object sender, EventArgs e)
