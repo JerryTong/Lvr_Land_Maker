@@ -41,7 +41,7 @@ namespace Lvr_Land_Maker
         {
             Logger logger = new Logger();
 
-            if (!Path.GetExtension(filePath).Equals("xml"))
+            if (!Path.GetExtension(filePath).ToUpper().Equals(".XML"))
             {
                 logger.Path = filePath;
                 logger.Type = LoggerType.DataException;

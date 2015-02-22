@@ -37,6 +37,7 @@
       <HintPath>bin\Debug\FrameworkLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\LandMakerHelper.cs" />
+    <Compile Include="DAL\AttributeManager.cs" />
     <Compile Include="DAL\LandMakerDA.cs" />
     <Compile Include="BLL\Logger.cs" />
     <Compile Include="Extension\ProgressBarExtension.cs" />
@@ -82,6 +84,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="Configuration\Attribute.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
