@@ -9,12 +9,20 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lvr_Land_Maker.Models.Configuartion;
 
 namespace Lvr_Land_Maker.BLL
 {
     public class LandMakerHelper
     {
+        private static string FORMAT_EXCEPTION_MSG = "轉換{0}({1})屬性時發現未知名稱: ' {2} ' ";
         private static List<LandFileDetailInfo> taiwanLocationInfo = null;
+        private static List<Logger> transLogger = new List<Logger>();
+
+        public static List<Logger> GetTransLogger()
+        {
+            return transLogger;
+        }
 
         /// <summary>
         /// Create Land column data table.
@@ -80,7 +88,7 @@ namespace Lvr_Land_Maker.BLL
         }
 
         /// <summary>
-        /// 取得指定實價登錄檔案區域資料。
+        /// 取得指定實價登錄檔案地區區域資料。
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
@@ -99,19 +107,20 @@ namespace Lvr_Land_Maker.BLL
             string withoutFileName = Path.GetFileNameWithoutExtension(fileName);
             string cityCode = withoutFileName.Substring(0, 1);
             var locationDetail = taiwanLocationInfo.Where(t => t.CityCode == cityCode).FirstOrDefault();
+            
+            LandFileDetailInfo result = new LandFileDetailInfo();
             if (locationDetail == null)
             {
-                locationDetail = new LandFileDetailInfo
-                {
-                    CityCode = "-1",
-                    CityName = "None"
-                };
+                result.CityCode = "-1";
+                result.CityName = "None";
             }
 
-            locationDetail.FileName = withoutFileName;
-            locationDetail.SaleType = ConvertSaleType(withoutFileName.Substring(withoutFileName.Length - 1, 1));
+            result.CityName = locationDetail.CityName;
+            result.CityCode = locationDetail.CityCode;
+            result.FileName = withoutFileName;
+            result.SaleType = ConvertSaleType(withoutFileName.Substring(withoutFileName.Length - 1, 1));
 
-            return locationDetail;
+            return result;
         }
 
         /// <summary>
@@ -122,6 +131,13 @@ namespace Lvr_Land_Maker.BLL
         /// <returns></returns>
         public static DataTable LvrTableToDataBaseTable(LandFileDetailInfo sourceDetail, DataTable columnTable)
         {
+            transLogger.Clear();
+
+            if (sourceDetail == null || sourceDetail.OriginalLvrLandTable == null)
+            {
+                return null;
+            }
+
             DataTable result = new DataTable();
             foreach (DataRow row in columnTable.Rows)
             {
@@ -129,7 +145,7 @@ namespace Lvr_Land_Maker.BLL
             }
           
             int index = 0;
-            foreach (DataRow dr in sourceDetail.LandCollectionTable.Rows)
+            foreach (DataRow dr in sourceDetail.OriginalLvrLandTable.Rows)
             {
                 DataRow tempRow = result.NewRow();
                 tempRow["SaleType"] = sourceDetail.SaleType;
@@ -206,21 +222,36 @@ namespace Lvr_Land_Maker.BLL
         /// <returns></returns>
         private static SubjectType ConvertSubjectType(string value)
         {
-            switch (value)
+            if (string.IsNullOrEmpty(value))
             {
-                case "建物":
-                    return SubjectType.Buildings;
-                case "土地":
-                    return SubjectType.Land;
-                case "車位":
-                    return SubjectType.Parking;
-                case "房地(土地+建物)":
-                    return SubjectType.BuildingsLand;
-                case "房地(土地+建物)+車位":
-                    return SubjectType.BuildingsLand;
-                default:
-                    return SubjectType.Non;
+                return SubjectType.Non;
             }
+
+            var type = AttributeConfigManager.Current.SubjectType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (SubjectType)type.Value.ToInt(-1);
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "交易標的", "SubjectType", value));
+
+            #region old
+            ////switch (value)
+            ////{
+            ////    case "建物":
+            ////        return SubjectType.Buildings;
+            ////    case "土地":
+            ////        return SubjectType.Land;
+            ////    case "車位":
+            ////        return SubjectType.Parking;
+            ////    case "房地(土地+建物)":
+            ////        return SubjectType.BuildingsLand;
+            ////    case "房地(土地+建物)+車位":
+            ////        return SubjectType.BuildingsLand;
+            ////    default:
+            ////        return SubjectType.Non;
+            ////}
+            #endregion            
         }
 
         /// <summary>
@@ -230,21 +261,36 @@ namespace Lvr_Land_Maker.BLL
         /// <returns></returns>
         private static PartitionType ConvertPartitionType(string value)
         {
-            switch (value)
+            if (string.IsNullOrEmpty(value))
             {
-                case "住":
-                    return PartitionType.Residential;
-                case "商":
-                    return PartitionType.Business;
-                case "工":
-                    return PartitionType.Industrial;
-                case "農":
-                    return PartitionType.Agricultural;
-                case "其他":
-                    return PartitionType.Other;
-                default:
-                    return PartitionType.Non;
+                return PartitionType.Non;
             }
+
+            var type = AttributeConfigManager.Current.PartitionType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (PartitionType)type.Value.ToInt(-1);
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "都市土地使用分區", "PartitionType", value));
+
+            #region old
+            ////switch (value)
+            ////{
+            ////    case "住":
+            ////        return PartitionType.Residential;
+            ////    case "商":
+            ////        return PartitionType.Business;
+            ////    case "工":
+            ////        return PartitionType.Industrial;
+            ////    case "農":
+            ////        return PartitionType.Agricultural;
+            ////    case "其他":
+            ////        return PartitionType.Other;
+            ////    default:
+            ////        return PartitionType.Non;
+            ////}
+            #endregion
         }
 
         /// <summary>
@@ -254,29 +300,44 @@ namespace Lvr_Land_Maker.BLL
         /// <returns></returns>
         private static BuildsType ConvertBuildsType(string value)
         {
-            switch (value)
+            if (string.IsNullOrEmpty(value))
             {
-                case "辦公商業大樓":
-                    return BuildsType.BusinessBuilding;
-                case "華夏(10樓以下電梯)":
-                    return BuildsType.Building_10;
-                case "公寓(5樓含以下無電梯)":
-                    return BuildsType.Apartment;
-                case "透天厝":
-                    return BuildsType.Detached;
-                case "廠辦":
-                    return BuildsType.FactoryOffice;
-                case "住宅大樓(11層含以上有電梯)":
-                    return BuildsType.LargeBuilding;
-                case "店面(店鋪)":
-                    return BuildsType.Store;
-                case "套房(1房1廳1衛)":
-                    return BuildsType.Suite;
-                case "其他":
-                    return BuildsType.Other;
-                default:
-                    return BuildsType.Non;
+                return BuildsType.Non;
             }
+
+            var type = AttributeConfigManager.Current.BuildsType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (BuildsType)type.Value.ToInt(-1);
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "建物型態", "BuildsType", value));
+
+            #region
+            ////switch (value)
+            ////{
+            ////    case "辦公商業大樓":
+            ////        return BuildsType.BusinessBuilding;
+            ////    case "華夏(10樓以下電梯)":
+            ////        return BuildsType.Building_10;
+            ////    case "公寓(5樓含以下無電梯)":
+            ////        return BuildsType.Apartment;
+            ////    case "透天厝":
+            ////        return BuildsType.Detached;
+            ////    case "廠辦":
+            ////        return BuildsType.FactoryOffice;
+            ////    case "住宅大樓(11層含以上有電梯)":
+            ////        return BuildsType.LargeBuilding;
+            ////    case "店面(店鋪)":
+            ////        return BuildsType.Store;
+            ////    case "套房(1房1廳1衛)":
+            ////        return BuildsType.Suite;
+            ////    case "其他":
+            ////        return BuildsType.Other;
+            ////    default:
+            ////        return BuildsType.Non;
+            ////}
+            #endregion
         }
 
         /// <summary>
@@ -286,27 +347,42 @@ namespace Lvr_Land_Maker.BLL
         /// <returns></returns>
         private static UsingType ConvertUsingType(string value)
         {
-            switch (value)
+            if (string.IsNullOrEmpty(value))
             {
-                case "住家用":
-                    return UsingType.HomeUse;
-                case "商業用":
-                    return UsingType.Commercial;
-                case "國民住宅":
-                    return UsingType.NationalHouse;
-                case "見使用執照":
-                    return UsingType.SeeUseLicense;
-                case "停車空間":
-                    return UsingType.ParkingSpace;
-                case "工業用":
-                    return UsingType.Industrial;
-                case "住商用":
-                    return UsingType.HomeUseCommercial;
-                case "見其他登記事項":
-                    return UsingType.Other;
-                default:
-                    return UsingType.Non;
+                return UsingType.Non;
             }
+
+            var type = AttributeConfigManager.Current.UsingType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (UsingType)type.Value.ToInt(-1);
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "主要用途", "UsingType", value));
+
+            #region
+            ////switch (value)
+            ////{
+            ////    case "住家用":
+            ////        return UsingType.HomeUse;
+            ////    case "商業用":
+            ////        return UsingType.Commercial;
+            ////    case "國民住宅":
+            ////        return UsingType.NationalHouse;
+            ////    case "見使用執照":
+            ////        return UsingType.SeeUseLicense;
+            ////    case "停車空間":
+            ////        return UsingType.ParkingSpace;
+            ////    case "工業用":
+            ////        return UsingType.Industrial;
+            ////    case "住商用":
+            ////        return UsingType.HomeUseCommercial;
+            ////    case "見其他登記事項":
+            ////        return UsingType.Other;
+            ////    default:
+            ////        return UsingType.Non;
+            ////}
+            #endregion
         }
 
         /// <summary>
@@ -316,31 +392,47 @@ namespace Lvr_Land_Maker.BLL
         /// <returns></returns>
         private static MaterialsType ConvertMaterialsType(string value)
         {
-            switch (value)
+            if (string.IsNullOrEmpty(value))
             {
-                case "鋼筋混擬土造":
-                    return MaterialsType.RCC;
-                case "鋼骨混凝土造":
-                    return MaterialsType.SCC;
-                case "鋼骨鋼筋混凝土造":
-                    return MaterialsType.SRCC;
-                case "預力混凝土造":
-                    return MaterialsType.PCC;
-                case "土磚石混合造":
-                    return MaterialsType.MSM;
-                case "磚造":
-                    return MaterialsType.MB;
-                case "加強磚造":
-                    return MaterialsType.SB;
-                case "見使用執照":
-                    return MaterialsType.SeeLicense;
-                case "見其他登記事項":
-                    return MaterialsType.Other;
-                default:
-                    return MaterialsType.Non;
-
-
+                return MaterialsType.Non;
             }
+
+            var type = AttributeConfigManager.Current.MaterialsType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (MaterialsType)type.Value.ToInt(-1);
+            }
+
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "主要建材", "MaterialsType", value));
+
+            #region 
+            ////switch (value)
+            ////{
+            ////    case "鋼筋混擬土造":
+            ////        return MaterialsType.RCC;
+            ////    case "鋼骨混凝土造":
+            ////        return MaterialsType.SCC;
+            ////    case "鋼骨鋼筋混凝土造":
+            ////        return MaterialsType.SRCC;
+            ////    case "預力混凝土造":
+            ////        return MaterialsType.PCC;
+            ////    case "土磚石混合造":
+            ////        return MaterialsType.MSM;
+            ////    case "磚造":
+            ////        return MaterialsType.MB;
+            ////    case "加強磚造":
+            ////        return MaterialsType.SB;
+            ////    case "見使用執照":
+            ////        return MaterialsType.SeeLicense;
+            ////    case "見其他登記事項":
+            ////        return MaterialsType.Other;
+            ////    default:
+            ////        return MaterialsType.Non;
+
+
+            ////}
+            #endregion
         }
 
 
@@ -351,15 +443,30 @@ namespace Lvr_Land_Maker.BLL
         /// <returns></returns>
         private static bool ConvertBool(string value)
         {
-            switch (value)
+            if (string.IsNullOrEmpty(value))
             {
-                case "有":
-                    return true;
-                case "無":
-                    return false;
-                default:
-                    return false;
+                return false;
             }
+
+            var type = AttributeConfigManager.Current.HasBool.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return type.Value == "1";
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "布林值轉換", "Had-Bool", value));
+
+            #region
+            ////switch (value)
+            ////{
+            ////    case "有":
+            ////        return true;
+            ////    case "無":
+            ////        return false;
+            ////    default:
+            ////        return false;
+            ////}
+            #endregion
         }
 
         /// <summary>
@@ -369,25 +476,40 @@ namespace Lvr_Land_Maker.BLL
         /// <returns></returns>
         private static ParkingType ConvertParkingType(string value)
         {
-            switch (value)
+            if (string.IsNullOrEmpty(value))
             {
-                case "坡道平面":
-                    return ParkingType.Rp;
-                case "一樓平面":
-                    return ParkingType.Ff;
-                case "坡道機械":
-                    return ParkingType.Rm;
-                case "塔式車位":
-                    return ParkingType.Tp;
-                case "升降機械":
-                    return ParkingType.Lm;
-                case "升降平面":
-                    return ParkingType.LP;
-                case "其他":
-                    return ParkingType.Other;
-                default:
-                    return ParkingType.Non;
+                return ParkingType.Non;
             }
+
+            var type = AttributeConfigManager.Current.ParkingType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (ParkingType)type.Value.ToInt(-1);
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "車位類別", "ParkingType", value));
+
+            #region
+            ////switch (value)
+            ////{
+            ////    case "坡道平面":
+            ////        return ParkingType.Rp;
+            ////    case "一樓平面":
+            ////        return ParkingType.Ff;
+            ////    case "坡道機械":
+            ////        return ParkingType.Rm;
+            ////    case "塔式車位":
+            ////        return ParkingType.Tp;
+            ////    case "升降機械":
+            ////        return ParkingType.Lm;
+            ////    case "升降平面":
+            ////        return ParkingType.LP;
+            ////    case "其他":
+            ////        return ParkingType.Other;
+            ////    default:
+            ////        return ParkingType.Non;
+            ////}
+            #endregion           
         }
 
         /// <summary>

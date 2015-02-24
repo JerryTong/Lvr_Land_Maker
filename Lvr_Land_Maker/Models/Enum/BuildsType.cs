@@ -38,12 +38,24 @@ namespace Lvr_Land_Maker.Models.Enum
         /// </summary>
         BusinessBuilding = 7,
         /// <summary>
+        /// 工廠
+        /// </summary>
+        Factory = 8,
+        /// <summary>
         /// 廠辦
         /// </summary>
-        FactoryOffice = 8,
+        FactoryOffice = 9,
+        /// <summary>
+        /// 農舍
+        /// </summary>
+        Farmhouse = 10,
+        /// <summary>
+        /// 倉庫
+        /// </summary>
+        Warehouse = 11,
         /// <summary>
         /// other
         /// </summary>
-        Other = 9
+        Other = 11
     }
 }

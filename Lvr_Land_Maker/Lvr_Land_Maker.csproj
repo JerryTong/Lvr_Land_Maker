@@ -50,9 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\LandMakerHelper.cs" />
-    <Compile Include="DAL\AttributeManager.cs" />
     <Compile Include="DAL\LandMakerDA.cs" />
     <Compile Include="BLL\Logger.cs" />
+    <Compile Include="Extension\LabelExtension.cs" />
     <Compile Include="Extension\ProgressBarExtension.cs" />
     <Compile Include="Extension\RickTextBoxExtension.cs" />
     <Compile Include="MainForm.cs">
@@ -61,6 +61,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Configuartion\AttributeConfigManager.cs" />
     <Compile Include="Models\Enum\BuildsType.cs" />
     <Compile Include="Models\Enum\CarType.cs" />
     <Compile Include="Models\Enum\MaterialsType.cs" />

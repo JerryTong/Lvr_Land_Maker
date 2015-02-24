@@ -33,6 +33,14 @@ namespace Lvr_Land_Maker.Models
         [XmlElement("Township")]
         public string Townships { get; set; }
 
-        public DataTable LandCollectionTable { get; set; }
+        /// <summary>
+        /// 原始Lvr_Land數據
+        /// </summary>
+        public DataTable OriginalLvrLandTable { get; set; }
+
+        /// <summary>
+        /// 轉換後Lvr_Land數據
+        /// </summary>
+        public DataTable TransLvrLandTable { get; set; }
     }
 }

@@ -38,9 +38,21 @@ namespace Lvr_Land_Maker.Models.Enum
         /// </summary>
         HomeUseCommercial = 7,
         /// <summary>
+        /// 住工用
+        /// </summary>
+        HomeUseIndustrial = 8,
+        /// <summary>
+        /// 工商用
+        /// </summary>
+        IndustrialUseCommercial = 9,
+        /// <summary>
+        /// 農業用
+        /// </summary>
+        FarmHouse = 10, 
+        /// <summary>
         /// 見其他登記事項
         /// </summary>
-        Other = 8,
+        Other = 9,
         
     }
 }

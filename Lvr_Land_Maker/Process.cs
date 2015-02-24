@@ -19,7 +19,7 @@ namespace Lvr_Land_Maker
         private const string WRITEING = "寫入";
         private const string IGNORE = "忽略";
         private const string DATA_FILE_ERROR = "非XML格式文件";
-        private const string NONE_LANDDATA = "{0} 本期 {1} 無資料 - ";
+        private const string NONE_LANDDATA = "本期{0} [{1}] 無資料 - ";
         private const string SALE_DATA = "{0}-{1} [不動產] - ";
         private const string PREORDER_DATA = "{0}-{1} [預售屋] - ";
         private const string LEASING = "{0}-{1} [ 預購 ] - ";
@@ -33,56 +33,133 @@ namespace Lvr_Land_Maker
         }
 
         /// <summary>
-        /// 主方法。
+        /// 確認選擇檔案皆為XML文件。
         /// </summary>
-        /// <param name="filePath"></param>
+        /// <param name="filePaths"></param>
+        /// <param name="errorFileExtension"></param>
         /// <returns></returns>
-        public Logger LandMakerProcess(string filePath)
+        public bool CheckFileExtension(List<string> filePaths, out string errorFileExtension)
         {
-            Logger logger = new Logger();
-
-            if (!Path.GetExtension(filePath).ToUpper().Equals(".XML"))
+            foreach (var path in filePaths)
             {
-                logger.Path = filePath;
-                logger.Type = LoggerType.DataException;
-                logger.Message = string.Format(DATA_FILE_ERROR);
-                return logger;
+                if (!Path.GetExtension(path).ToUpper().Equals(".XML"))
+                {
+                    errorFileExtension = path;
+                    return false;
+                }
             }
 
-            LandFileDetailInfo landDetail = new LandFileDetailInfo();
-            landDetail = LandMakerHelper.GetLandXmlFileDetailInfo(filePath);
-            landDetail.LandCollectionTable = LandMakerDA.GetLvrLandInfo(filePath);
+            errorFileExtension = string.Empty;
+            return true;
+        }
 
-            if (landDetail == null || landDetail.LandCollectionTable == null || landDetail.LandCollectionTable.Rows.Count == 0)
+        /// <summary>
+        /// 取得實價登錄資料。
+        /// </summary>
+        /// <param name="filePaths"></param>
+        /// <returns></returns>
+        public List<LandFileDetailInfo> GetLvrLandDetailInfo(List<string> filePaths)
+        {
+            var result = new List<LandFileDetailInfo>();
+            foreach (var path in filePaths)
             {
-                logger.Path = filePath;
-                logger.Type = LoggerType.DataException;
-                logger.Message = string.Format(NONE_LANDDATA, landDetail.CityName, landDetail.SaleType);
-                return logger;
+                LandFileDetailInfo landDetail = new LandFileDetailInfo();
+                landDetail = LandMakerHelper.GetLandXmlFileDetailInfo(path);
+                landDetail.OriginalLvrLandTable = LandMakerDA.GetLvrLandInfo(path);
+
+                result.Add(landDetail);
             }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 確認實價登錄欄位屬性皆為已知。d
+        /// </summary>
+        /// <returns></returns>
+        public DataTable TransFormatLvrLandData(LandFileDetailInfo landDetailInfo, out string errorMsg)
+        {
+            errorMsg = string.Empty;
+
+            if (landDetailInfo == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                if (landDetailInfo.SaleType == SaleType.Sale || landDetailInfo.SaleType == SaleType.PreOrder)
+                {
+                    DataTable resultTable = LandMakerHelper.LvrTableToDataBaseTable(landDetailInfo, this.dataBaseTableFormat);
+                    return resultTable;
+                }
+
+                return null;
+            }
+            catch (FormatException formatEx)
+            {
+                errorMsg = formatEx.Message;
+                return null;
+            }
+            catch (Exception ex)
+            {
+                errorMsg = ex.Message + "\n" + ex.StackTrace;
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 將資料寫入資料庫。
+        /// </summary>
+        /// <param name="landDetail"></param>
+        /// <returns></returns>
+        public Logger LandInsertToDataBase(LandFileDetailInfo landDetail)
+        {
+            Logger loggerResult = null;
 
             if (landDetail.SaleType == SaleType.Sale || landDetail.SaleType == SaleType.PreOrder)
             {
-                ////資料轉換
-                DataTable resultTable = LandMakerHelper.LvrTableToDataBaseTable(landDetail, this.dataBaseTableFormat);
-                LandMakerDA.WriteingToDatabase(resultTable);
-                return new Logger(LoggerType.AppMessage,
-                                    filePath,
-                                    landDetail.SaleType == SaleType.Sale ? string.Format(SALE_DATA, WRITEING, SUCCESSFUL) 
-                                                                            : string.Format(PREORDER_DATA, WRITEING, SUCCESSFUL),
-                                    string.Empty, 
-                                    string.Empty);
+                if (landDetail.TransLvrLandTable != null)
+                {
+                    LandMakerDA.WriteingToDatabase(landDetail.TransLvrLandTable);
+
+                    loggerResult = new Logger
+                    {
+                        Type = LoggerType.AppMessage,
+                        Path = landDetail.FileName,
+                        Message = landDetail.SaleType == SaleType.Sale ? string.Format(SALE_DATA, WRITEING, SUCCESSFUL)
+                                                                                : string.Format(PREORDER_DATA, WRITEING, SUCCESSFUL),
+                        InternalDescription = string.Empty,
+                        StackTrace = string.Empty,
+                    };
+                }
+                else
+                {
+                    ////無資料情況
+                    loggerResult = new Logger
+                    {
+                        Type = LoggerType.DataException,
+                        Path = landDetail.FileName,
+                        Message = landDetail.SaleType == SaleType.Sale ? string.Format(NONE_LANDDATA, landDetail.CityName, "買賣")
+                                                                                : string.Format(NONE_LANDDATA, landDetail.CityName, "預售"),
+                        InternalDescription = string.Empty,
+                        StackTrace = string.Empty,
+                    };
+                }
             }
             else if (landDetail.SaleType == SaleType.Leasing)
             {
-                return new Logger(LoggerType.DataException,
-                                    filePath,
-                                    string.Format(LEASING, IGNORE, WRITEING), 
-                                    string.Empty, 
-                                    string.Empty);
+                loggerResult = new Logger
+                {
+                    Type = LoggerType.DataException,
+                    Path = landDetail.FileName,
+                    Message = string.Format(LEASING, IGNORE, WRITEING),
+                    InternalDescription = string.Empty,
+                    StackTrace = string.Empty,
+                };
             }
 
-            return logger;
+            return loggerResult;
         }
     }
 }
