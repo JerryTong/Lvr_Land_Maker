@@ -117,6 +117,7 @@ namespace Lvr_Land_Maker.BLL
 
             result.CityName = locationDetail.CityName;
             result.CityCode = locationDetail.CityCode;
+            result.ZipCode = locationDetail.ZipCode;
             result.FileName = withoutFileName;
             result.SaleType = ConvertSaleType(withoutFileName.Substring(withoutFileName.Length - 1, 1));
 
@@ -139,11 +140,13 @@ namespace Lvr_Land_Maker.BLL
             }
 
             DataTable result = new DataTable();
+            result.Columns.Add("IsAdd");
+
             foreach (DataRow row in columnTable.Rows)
             {
                 result.Columns.Add(row["ColumnName"].ToString());
             }
-          
+           
             int index = 0;
             foreach (DataRow dr in sourceDetail.OriginalLvrLandTable.Rows)
             {
@@ -190,6 +193,9 @@ namespace Lvr_Land_Maker.BLL
                 tempRow["CarLevelGround"] = CalculateSMToLevelGround(dr["車位移轉總面積平方公尺"].ToDobule(0.0));
                 tempRow["CarCost"] = dr["車位總價元"];
                 tempRow["EditTime"] = DateTime.Now;
+
+                ////是否允許寫入DB
+                tempRow["IsAdd"] = 1;
 
                 result.Rows.Add(tempRow);
                 index++;

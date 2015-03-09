@@ -77,13 +77,17 @@ namespace Lvr_Land_Maker.Models.Enum
         /// </summary>
         Soil_Wooden = 16,
         /// <summary>
+        /// 土石造
+        /// </summary>
+        Soil_Stone = 17,
+        /// <summary>
         /// 壁式預鑄鋼筋混凝土造
         /// </summary>
-        RRCCSB = 17,
+        RRCCSB = 18,
         /// <summary>
         /// 見其他登記事項
         /// See other registration matters
         /// </summary>
-        Other = 18,
+        Other = 19,
     }
 }

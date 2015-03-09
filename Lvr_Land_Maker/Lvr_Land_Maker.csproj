@@ -62,6 +62,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Configuartion\AttributeConfigManager.cs" />
+    <Compile Include="Models\Configuartion\CheckDataConfigManager.cs" />
     <Compile Include="Models\Enum\BuildsType.cs" />
     <Compile Include="Models\Enum\CarType.cs" />
     <Compile Include="Models\Enum\MaterialsType.cs" />
@@ -86,6 +87,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="Configuration\Attribute.config" />
+    <None Include="Configuration\CheckData.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

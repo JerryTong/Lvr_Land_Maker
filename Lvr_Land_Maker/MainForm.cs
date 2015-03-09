@@ -29,8 +29,9 @@ namespace Lvr_Land_Maker
 
             statusLabel.AsyncText("正在檢查檔案格式...");
             string errorFileExtension = string.Empty;
-            
-            if (!process.CheckFileExtension(filesPath, out errorFileExtension))
+
+            bool isExtensionAccuracy = process.CheckFileExtension(filesPath, out errorFileExtension);
+            if (!isExtensionAccuracy)
             {
                 resultLogger.Add(new Logger
                 {
@@ -43,7 +44,7 @@ namespace Lvr_Land_Maker
                 AppendLoggerMsg(resultLogger);
                 progressBar1.SetValueAsyc(0);
 
-                return; ////轉換失敗，程序結束。
+                return; ////檔案格式不符，轉換失敗，程序結束。
             }
 
             progressBar1.SetValueAsyc(filesPath.Count);
@@ -51,25 +52,42 @@ namespace Lvr_Land_Maker
             var lvrLandList = process.GetLvrLandDetailInfo(filesPath);
             if (lvrLandList == null)
             {
-                ////
+                MessageBox.Show(string.Format("讀取實價登錄資料發生錯誤 - {0}", "不明"), "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppendLoggerMsg(resultLogger);
+                progressBar1.SetValueAsyc(0);
+
+                return;  ////取得實價登錄資料出錯，程序結束
             }
 
             foreach (var detail in lvrLandList)
             {
+                ////解析檔案內容
                 statusLabel.AsyncText(string.Format("正在檢查檔案-{0} 內容...", detail.FileName));
 
-                string errorMsg = string.Empty;
-                detail.TransLvrLandTable = process.TransFormatLvrLandData(detail, out errorMsg);
-                progressBar1.SetValueAsyc(progressBar1.Value + 1);
-
-                if (!string.IsNullOrEmpty(errorMsg))
+                string errMessage = string.Empty;
+                detail.TransLvrLandTable = process.TransFormatLvrLandData(detail, out errMessage);
+                if (detail.TransLvrLandTable != null && string.IsNullOrEmpty(errMessage))
                 {
-                    MessageBox.Show(string.Format("檔案:{0}\n錯誤分析:{1}", detail.FileName, errorMsg), "實價登錄資料轉換錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    foreach (var row in detail.TransLvrLandTable.AsEnumerable().ToList())
+                    {
+                        bool isAccuracy = process.CheckTransDataRowsAccuracy(row, detail.SaleType, out errMessage);
+                        if (!isAccuracy && MessageBox.Show(string.Format("檔案:{0}\n錯誤分析:{1}\n\n[詢問] 是否忽略寫入此筆資料?", detail.FileName, errMessage), "實價登錄資料轉換驗證錯誤", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes) 
+                        {
+                            row.SetField<string>("IsAdd", "0");
+                        }
+                    }
+                }
+
+                progressBar1.SetValueAsyc(progressBar1.Value + 1);
+                
+                if (!string.IsNullOrEmpty(errMessage))
+                {
+                    MessageBox.Show(string.Format("檔案:{0}\n錯誤分析:{1}", detail.FileName, errMessage), "實價登錄資料轉換驗證錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     resultLogger.Add(new Logger
                     {
                         Type = LoggerType.DataException,
-                        Message = string.Format("檔案:{0}\n錯誤分析:{1}", detail.FileName, errorMsg),
+                        Message = string.Format("檔案:{0}\n錯誤分析:{1}", detail.FileName, errMessage),
                         Path = detail.FileName,
                     });
 
@@ -159,6 +177,11 @@ namespace Lvr_Land_Maker
             }
 
             AppendLoggerMsg(tmpLogger.ToList());
+        }
+
+        private void ShowErrorMessage()
+        {
+            ////
         }
 
         private async void label1_DragDrop(object sender, DragEventArgs e)

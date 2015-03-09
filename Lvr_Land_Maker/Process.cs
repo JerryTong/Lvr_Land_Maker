@@ -1,6 +1,7 @@
 ﻿using Lvr_Land_Maker.BLL;
 using Lvr_Land_Maker.DAL;
 using Lvr_Land_Maker.Models;
+using Lvr_Land_Maker.Models.Configuartion;
 using Lvr_Land_Maker.Models.Enum;
 using System;
 using System.Collections.Generic;
@@ -74,7 +75,7 @@ namespace Lvr_Land_Maker
         }
 
         /// <summary>
-        /// 確認實價登錄欄位屬性皆為已知。d
+        /// 確認實價登錄欄位屬性皆為已知。
         /// </summary>
         /// <returns></returns>
         public DataTable TransFormatLvrLandData(LandFileDetailInfo landDetailInfo, out string errorMsg)
@@ -88,6 +89,7 @@ namespace Lvr_Land_Maker
 
             try
             {
+                ////預售、中古
                 if (landDetailInfo.SaleType == SaleType.Sale || landDetailInfo.SaleType == SaleType.PreOrder)
                 {
                     DataTable resultTable = LandMakerHelper.LvrTableToDataBaseTable(landDetailInfo, this.dataBaseTableFormat);
@@ -109,6 +111,94 @@ namespace Lvr_Land_Maker
         }
 
         /// <summary>
+        /// 檢查實價登錄欄位資料正確性。
+        /// </summary>
+        /// <param name="transDataRow"></param>
+        /// <param name="saleType"></param>
+        /// <param name="errMessage"></param>
+        /// <returns></returns>
+        public bool CheckTransDataRowsAccuracy(DataRow transDataRow, SaleType saleType, out string errMessage)
+        {
+            errMessage = string.Empty;
+            if (transDataRow == null)
+            {
+                errMessage = "轉換資料為空";
+                return false;
+            }
+
+            List<Column> columns = null;
+            if (saleType == SaleType.Sale || saleType == SaleType.PreOrder)
+            {
+                columns = CheckDataConfigManager.Current.SaleAndPreorder.columns;
+            }
+
+            if (columns == null || columns.Count == 0)
+            {
+                return true;
+            }
+
+            foreach (var col in columns)
+            {
+                ////允許為空且不檢查長度則跳過
+                if (col.IsAllowNull && !col.IsCheckLen)
+                {
+                    continue;
+                }
+
+                if (col.IsCheckLen)
+                {
+                    var isAccuracy = this.CheckDataLength(transDataRow[col.Name].ToString(), col.LenMax, col.LenMin);
+                    if (!isAccuracy)
+                    {
+                        errMessage = string.Format("長度不合規定。\n錯誤欄位:{0}; 值:{1}\n地址:{2}\n總價元{3}"
+                                                        , col.Name
+                                                        , transDataRow[col.Name].ToString()
+                                                        , transDataRow["Address"].ToString()
+                                                        , transDataRow["Cost"].ToString());
+                            
+                        return false;
+                    }
+                }
+
+                if (!col.IsAllowNull)
+                {
+                    if (string.IsNullOrEmpty(transDataRow[col.Name].ToString()))
+                    {
+                        errMessage = string.Format("資料不可為空。\n錯誤欄位:{0}; 值:{1}\n地址:{2}\n總價元{3}"
+                            , col.Name
+                            , transDataRow[col.Name].ToString()
+                            , transDataRow["Address"].ToString()
+                            , transDataRow["Cost"].ToString());
+
+                        return false;
+                    }
+                }
+               
+
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 檢查字串長度。
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="lenMax"></param>
+        /// <param name="lenMin"></param>
+        /// <returns></returns>
+        private bool CheckDataLength(string value, int lenMax, int lenMin)
+        {
+            int valueLen = value.Length;
+            if (!(valueLen >= lenMin && valueLen <= (lenMax / 2)))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// 將資料寫入資料庫。
         /// </summary>
         /// <param name="landDetail"></param>
@@ -116,12 +206,12 @@ namespace Lvr_Land_Maker
         public Logger LandInsertToDataBase(LandFileDetailInfo landDetail)
         {
             Logger loggerResult = null;
-
+            
             if (landDetail.SaleType == SaleType.Sale || landDetail.SaleType == SaleType.PreOrder)
             {
                 if (landDetail.TransLvrLandTable != null)
                 {
-                    LandMakerDA.WriteingToDatabase(landDetail.TransLvrLandTable);
+                    LandMakerDA.WriteingToDatabase(landDetail.TransLvrLandTable.Select("IsAdd=1").CopyToDataTable());
 
                     loggerResult = new Logger
                     {
