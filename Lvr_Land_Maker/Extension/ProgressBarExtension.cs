@@ -9,7 +9,15 @@ namespace Lvr_Land_Maker.Extension
 {
     public static class ProgressBarExtension
     {
-        public static void SetValueAsyc(this ProgressBar progressBar, int value)
+        public static void SetMiniValueSync(this ProgressBar progressBar, int value)
+        {
+            progressBar.Invoke(new Action(() =>
+            {
+                progressBar.Maximum = value;
+            }));
+        }
+    
+        public static void SetValueSync(this ProgressBar progressBar, int value)
         {
             progressBar.Invoke(new Action(() =>
             {

@@ -39,18 +39,35 @@ namespace Lvr_Land_Maker
         /// <param name="filePaths"></param>
         /// <param name="errorFileExtension"></param>
         /// <returns></returns>
-        public bool CheckFileExtension(List<string> filePaths, out string errorFileExtension)
+        public bool CheckFileExtension(List<string> filePaths, out string errorMsg)
         {
             foreach (var path in filePaths)
             {
-                if (!Path.GetExtension(path).ToUpper().Equals(".XML"))
+                if (this.CheckFileExtension(path, out errorMsg))
                 {
-                    errorFileExtension = path;
                     return false;
                 }
             }
 
-            errorFileExtension = string.Empty;
+            errorMsg = string.Empty;
+            return true;
+        }
+
+        /// <summary>
+        /// 確認選擇檔案皆為XML文件。
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="errorMsg"></param>
+        /// <returns></returns>
+        public bool CheckFileExtension(string filePath, out string errorMsg)
+        {
+            if (!Path.GetExtension(filePath).ToUpper().Equals(".XML"))
+            {
+                errorMsg = string.Format("{0} 非XML格式檔案。", filePath);
+                return false;
+            }
+
+            errorMsg = string.Empty;
             return true;
         }
 

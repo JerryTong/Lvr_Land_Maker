@@ -21,40 +21,53 @@ namespace Lvr_Land_Maker
             InitializeComponent();
         }
 
+        public void Prepare(List<string> filePages)
+        {
+            richTextBox1.ClearSync();
+
+            ////Progress Bar
+            progressBar1.SetMiniValueSync(filePages.Count * 3);
+            progressBar1.SetValueSync(0);
+        }
+
         public void Start(List<string> filesPath)
         {
-            int dataCount = 0; 
-            resultLogger = new List<Logger>();
+            this.Prepare(filesPath);
+
+            int dataCount = 0;
+            string errorMsg = string.Empty;
+
+            List<string> correctlyPath = new List<string>();
             Process process = new Process();
-
+            resultLogger = new List<Logger>();
+            
             statusLabel.AsyncText("正在檢查檔案格式...");
-            string errorFileExtension = string.Empty;
 
-            bool isExtensionAccuracy = process.CheckFileExtension(filesPath, out errorFileExtension);
-            if (!isExtensionAccuracy)
+            correctlyPath = this.GetCorrectlyPath(filesPath, out errorMsg);
+            if (correctlyPath == null)
             {
                 resultLogger.Add(new Logger
                 {
                     Type = LoggerType.DataException,
                     Message = "含有非XML格式文件。",
-                    Path = errorFileExtension,
+                    Path = errorMsg,
                 });
 
-                MessageBox.Show(string.Format("非XML文件檔案 - {0}", errorFileExtension), "含有非XML格式文件", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Format("{0}\n請重新檢查檔案格式正確性。", errorMsg), "含有非XML格式文件", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 AppendLoggerMsg(resultLogger);
-                progressBar1.SetValueAsyc(0);
+                progressBar1.SetValueSync(0);
 
-                return; ////檔案格式不符，轉換失敗，程序結束。
+                return; ////檔案格式不符，轉換中斷。
             }
 
-            progressBar1.SetValueAsyc(filesPath.Count);
-            
-            var lvrLandList = process.GetLvrLandDetailInfo(filesPath);
+            progressBar1.SetValueSync(correctlyPath.Count);
+
+            var lvrLandList = process.GetLvrLandDetailInfo(correctlyPath);
             if (lvrLandList == null)
             {
                 MessageBox.Show(string.Format("讀取實價登錄資料發生錯誤 - {0}", "不明"), "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 AppendLoggerMsg(resultLogger);
-                progressBar1.SetValueAsyc(0);
+                progressBar1.SetValueSync(0);
 
                 return;  ////取得實價登錄資料出錯，程序結束
             }
@@ -78,7 +91,7 @@ namespace Lvr_Land_Maker
                     }
                 }
 
-                progressBar1.SetValueAsyc(progressBar1.Value + 1);
+                progressBar1.SetValueSync(progressBar1.Value + 1);
                 
                 if (!string.IsNullOrEmpty(errMessage))
                 {
@@ -92,7 +105,7 @@ namespace Lvr_Land_Maker
                     });
 
                     AppendLoggerMsg(resultLogger);
-                    progressBar1.SetValueAsyc(0);
+                    progressBar1.SetValueSync(0);
                     return; ////轉換失敗，程序結束。
                 }
             }
@@ -103,11 +116,40 @@ namespace Lvr_Land_Maker
                 dataCount += land.TransLvrLandTable != null ? land.TransLvrLandTable.Rows.Count : 0;
                 resultLogger.Add(process.LandInsertToDataBase(land));
 
-                progressBar1.SetValueAsyc(progressBar1.Value + 1);
+                progressBar1.SetValueSync(progressBar1.Value + 1);
             });
 
             this.ShowLoggerMessageRichTextBoxContent(resultLogger, 0);
             MessageBox.Show(string.Format("資料已寫入({0}筆。", dataCount), "實價登錄資料轉換完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private List<string> GetCorrectlyPath(List<string> filePath, out string errorMsg)
+        {
+            List<string> correctlyPath = new List<string>();
+            Process process = new Process();
+            errorMsg = string.Empty;
+
+            foreach (var path in filePath)
+            {
+                if (!process.CheckFileExtension(path, out errorMsg))
+                {
+                    if ((MessageBox.Show(string.Format("{0}\n\n是否忽略此檔案?[Y/N](拒絕將結束停止轉換!)", errorMsg), "含有非XML格式文件", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes))
+                    {
+                        correctlyPath.Add("_" + path);
+                    }
+                    else
+                    {
+                        return null; ////檔案格式不符，轉換失敗，程序結束。
+                    }
+                }
+                else
+                {
+                    correctlyPath.Add(path);
+                }
+            }
+
+            correctlyPath.RemoveAll(f => f.StartsWith("_"));
+            return correctlyPath;
         }
 
         /// <summary>
@@ -179,27 +221,12 @@ namespace Lvr_Land_Maker
             AppendLoggerMsg(tmpLogger.ToList());
         }
 
-        private void ShowErrorMessage()
-        {
-            ////
-        }
-
         private async void label1_DragDrop(object sender, DragEventArgs e)
         {
-            List<string> filePath = ((string[])e.Data.GetData(DataFormats.FileDrop)).ToList();
+            List<string> filePaths = ((string[])e.Data.GetData(DataFormats.FileDrop)).ToList();
             this.toolStripButtonHide_Click(null, null);
-            richTextBox1.Clear();
 
-            ////Progress Bar
-            progressBar1.Maximum = filePath.Count * 3;
-            progressBar1.Value = 0;
-
-            ////statusLabel
-            statusLabel.Visible = true;
-
-            await Task.Run(() => { this.Start(filePath); });
-
-            statusLabel.Text = "作業完成";
+            await Task.Run(() => { this.Start(filePaths); });
         }
 
         private void label1_DragEnter(object sender, DragEventArgs e)
@@ -210,9 +237,15 @@ namespace Lvr_Land_Maker
             }
         }
 
-        private void selectMoreFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void selectMoreFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ////
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                List<string> filePaths = openFileDialog1.FileNames.ToList();
+                this.toolStripButtonHide_Click(null, null);
+
+                await Task.Run(() => { this.Start(filePaths); });
+            }
         }
 
         private void updateLandColumnIToolStripMenuItem_Click(object sender, EventArgs e)
