@@ -132,6 +132,7 @@
             this.richTextBox1.ForeColor = System.Drawing.Color.Brown;
             this.richTextBox1.Location = new System.Drawing.Point(0, 266);
             this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
             this.richTextBox1.Size = new System.Drawing.Size(1215, 339);
             this.richTextBox1.TabIndex = 10;
             this.richTextBox1.Text = "none";
@@ -261,7 +262,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "Lvr_Land Maker Bate v0.1.0";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip2.ResumeLayout(false);

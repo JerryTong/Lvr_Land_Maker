@@ -21,6 +21,10 @@ namespace Lvr_Land_Maker
             InitializeComponent();
         }
 
+        /// <summary>
+        ///Prepare UI Setting (Progress Bar)
+        /// </summary>
+        /// <param name="filePages"></param>
         public void Prepare(List<string> filePages)
         {
             richTextBox1.ClearSync();
@@ -123,6 +127,12 @@ namespace Lvr_Land_Maker
             MessageBox.Show(string.Format("資料已寫入({0}筆。", dataCount), "實價登錄資料轉換完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        /// <summary>
+        /// 過濾檔名
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="errorMsg"></param>
+        /// <returns></returns>
         private List<string> GetCorrectlyPath(List<string> filePath, out string errorMsg)
         {
             List<string> correctlyPath = new List<string>();
@@ -135,6 +145,7 @@ namespace Lvr_Land_Maker
                 {
                     if ((MessageBox.Show(string.Format("{0}\n\n是否忽略此檔案?[Y/N](拒絕將結束停止轉換!)", errorMsg), "含有非XML格式文件", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes))
                     {
+                        ////Add Maker '_'
                         correctlyPath.Add("_" + path);
                     }
                     else
