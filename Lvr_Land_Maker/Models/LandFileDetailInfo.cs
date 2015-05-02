@@ -42,5 +42,15 @@ namespace Lvr_Land_Maker.Models
         /// 轉換後Lvr_Land數據
         /// </summary>
         public DataTable TransLvrLandTable { get; set; }
+
+        #region version 2.0
+        public List<string> GroupFileNames { get; set; }
+
+        public DataTable OriginalBuildTable { get; set; }
+
+        public DataTable OriginalLandTable { get; set; }
+
+        public DataTable OriginalParkTable { get; set; }
+        #endregion
     }
 }

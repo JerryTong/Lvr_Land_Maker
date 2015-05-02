@@ -26,7 +26,7 @@ namespace Lvr_Land_Maker
         {
             TransformPerporty perporty = new TransformPerporty();
             perporty.FilesName = filesPath;
-            var result = new VersionATrnasfrom().Run(perporty);
+            var result = new VersionTrnasfrom().Run(perporty);
 
             this.richTextBox1.TextAsync(result.Message);
         }

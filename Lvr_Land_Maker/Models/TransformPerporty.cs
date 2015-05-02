@@ -12,7 +12,7 @@ namespace Lvr_Land_Maker.Models
         public int Version { get; set; }
 
         public List<string> FilesName { get; set; }
-
+        
         public string ErrorMessage { get; set; }
     }
 }

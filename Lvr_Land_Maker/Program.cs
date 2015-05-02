@@ -16,7 +16,7 @@ namespace Lvr_Land_Maker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new MainFormV2());
         }
     }
 }
