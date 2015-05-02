@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Lvr_Land_Maker.BLL;
 using Lvr_Land_Maker.Extension;
+using Lvr_Land_Maker.Models;
 
 namespace Lvr_Land_Maker
 {
@@ -19,6 +20,15 @@ namespace Lvr_Land_Maker
         public MainForm()
         {
             InitializeComponent();
+        }
+
+        public void NewStart(List<string> filesPath)
+        {
+            TransformPerporty perporty = new TransformPerporty();
+            perporty.FilesName = filesPath;
+            var result = new VersionATrnasfrom().Run(perporty);
+
+            this.richTextBox1.TextAsync(result.Message);
         }
 
         /// <summary>
@@ -237,7 +247,8 @@ namespace Lvr_Land_Maker
             List<string> filePaths = ((string[])e.Data.GetData(DataFormats.FileDrop)).ToList();
             this.toolStripButtonHide_Click(null, null);
 
-            await Task.Run(() => { this.Start(filePaths); });
+            await Task.Run(() => { this.NewStart(filePaths); });
+            ////await Task.Run(() => { this.Start(filePaths); });
         }
 
         private void label1_DragEnter(object sender, DragEventArgs e)
@@ -255,7 +266,8 @@ namespace Lvr_Land_Maker
                 List<string> filePaths = openFileDialog1.FileNames.ToList();
                 this.toolStripButtonHide_Click(null, null);
 
-                await Task.Run(() => { this.Start(filePaths); });
+                await Task.Run(() => { this.NewStart(filePaths); });
+                ///await Task.Run(() => { this.Start(filePaths); });
             }
         }
 

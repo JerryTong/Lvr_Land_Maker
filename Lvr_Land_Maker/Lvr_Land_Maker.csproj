@@ -49,7 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLL\ITransformBase.cs" />
     <Compile Include="BLL\LandMakerHelper.cs" />
+    <Compile Include="BLL\TransformBase.cs" />
+    <Compile Include="BLL\VersionATrnasfrom.cs" />
     <Compile Include="DAL\LandMakerDA.cs" />
     <Compile Include="BLL\Logger.cs" />
     <Compile Include="Extension\LabelExtension.cs" />
@@ -71,6 +74,8 @@
     <Compile Include="Models\Enum\SubjectType.cs" />
     <Compile Include="Models\Enum\UsingType.cs" />
     <Compile Include="Models\LandFileDetailInfo.cs" />
+    <Compile Include="Models\TransformPerporty.cs" />
+    <Compile Include="Models\TransformResult.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

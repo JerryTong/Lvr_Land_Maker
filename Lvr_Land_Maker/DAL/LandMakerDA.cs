@@ -56,7 +56,7 @@ namespace Lvr_Land_Maker.DAL
                     sqlBC.SqlRowsCopied += new SqlRowsCopiedEventHandler(OnSqlRowsCopied);
 
                     //設定要寫入的資料庫 
-                    sqlBC.DestinationTableName = "dbo.LvrLandOriginalBase";
+                    sqlBC.DestinationTableName = "dbo.LvrLandOriginalBaseTest";
 
                     //對應資料行 
                     sqlBC.ColumnMappings.Add("SaleType", "SaleType");
