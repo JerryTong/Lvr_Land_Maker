@@ -13,32 +13,32 @@ namespace Lvr_Land_Maker.Models.Enum
         /// <summary>
         /// 坡道平面 Ramp plane
         /// </summary>
-        Rp = 1,
+        RampPlane = 1,
 
         /// <summary>
         /// 一樓平面 First floor flat
         /// </summary>
-        Ff = 2,
+        FirstFloorFlat = 2,
 
         /// <summary>
         /// 坡道機械 Ramp machinery
         /// </summary>
-        Rm = 3,
+        RampMachinery = 3,
 
         /// <summary>
         /// 塔式車位 Tower parking
         /// </summary>
-        Tp = 4,
+        TowerParking = 4,
 
         /// <summary>
         /// 升降機械 Lifting machinery
         /// </summary>
-        Lm = 5,
+        LiftingMachinery = 5,
 
         /// <summary>
         /// 升降平面
         /// </summary>
-        LP = 6,
+        LiftingPlane = 6,
 
         /// <summary>
         /// 其他 other

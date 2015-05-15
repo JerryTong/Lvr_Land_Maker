@@ -56,6 +56,6 @@ namespace Lvr_Land_Maker.Models.Enum
         /// <summary>
         /// other
         /// </summary>
-        Other = 11
+        Other = 12
     }
 }

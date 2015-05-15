@@ -13,46 +13,61 @@ namespace Lvr_Land_Maker.Models.Enum
         /// 住家用
         /// </summary>
         HomeUse = 1,
+
         /// <summary>
         /// 商業用
         /// </summary>
-        Commercial = 2,
-        /// <summary>
-        /// 國民住宅
-        /// </summary>
-        NationalHouse = 3,
-        /// <summary>
-        /// 見使用執照
-        /// </summary>
-        SeeUseLicense = 4,
-        /// <summary>
-        /// 停車空間
-        /// </summary>
-        ParkingSpace = 5,
+        Business = 2,
+
         /// <summary>
         /// 工業用
         /// </summary>
-        Industrial = 6,
+        Industrial = 3,
+
         /// <summary>
-        /// 住商用
+        /// 辦公室
         /// </summary>
-        HomeUseCommercial = 7,
-        /// <summary>
-        /// 住工用
-        /// </summary>
-        HomeUseIndustrial = 8,
-        /// <summary>
-        /// 工商用
-        /// </summary>
-        IndustrialUseCommercial = 9,
+        Office = 4,
+
         /// <summary>
         /// 農業用
         /// </summary>
-        FarmHouse = 10, 
+        FarmHouse = 5, 
+
+        /// <summary>
+        /// 住商用
+        /// </summary>
+        HomeUseWithBusiness = 6,
+
+        /// <summary>
+        /// 工商用
+        /// </summary>
+        IndustryWithBusiness = 7,
+
+        /// <summary>
+        /// 住工用
+        /// </summary>
+        HomeUseWithIndustry = 8,
+
+        /// <summary>
+        /// 廠房
+        /// </summary>
+        Factory = 9,
+
+        /// <summary>
+        /// 國民住宅
+        /// </summary>
+        PublicHousing = 10,
+
+        /// <summary>
+        /// 停車空間
+        /// </summary>
+        ParkingSpace = 11,
+        
         /// <summary>
         /// 見其他登記事項
         /// </summary>
-        Other = 9,
+        Other = 99,
         
     }
 }
