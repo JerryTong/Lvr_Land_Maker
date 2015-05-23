@@ -10,7 +10,7 @@ namespace Lvr_Land_Maker.BLL
 {
     public class TransformBase: ITransformBase
     {
-        public void Transform(TransformPerporty transformPerporty)
+        public void Transform(TransformProperty transformPerporty)
         {
             if (transformPerporty.FilesName == null || transformPerporty.FilesName.Count == 0)
             {
@@ -25,6 +25,16 @@ namespace Lvr_Land_Maker.BLL
                     break;
                 }
             }
+        }
+
+        public virtual List<LandFileDetailInfo> GetLvrLandDetailInfo(List<string> filesName)
+        {
+            return null;
+        }
+
+        public virtual List<LandFileDetailInfo> GetLvrLandDetailInfo(Dictionary<int, FilesDict> filesName)
+        {
+            return null;
         }
     }
 }

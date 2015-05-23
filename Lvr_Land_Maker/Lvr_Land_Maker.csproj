@@ -49,9 +49,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLL\BusinessModelHelper.cs" />
+    <Compile Include="BLL\Insert\InsertDataCore.cs" />
+    <Compile Include="BLL\Insert\InsertDataV2.cs" />
     <Compile Include="BLL\ITransformBase.cs" />
     <Compile Include="BLL\LandMakerHelper.cs" />
     <Compile Include="BLL\TransformBase.cs" />
+    <Compile Include="BLL\Transform\TransformCore.cs" />
+    <Compile Include="BLL\Transform\TransformV2.cs" />
+    <Compile Include="BLL\Validate\ValidateCore.cs" />
+    <Compile Include="BLL\Validate\ValidateV2.cs" />
     <Compile Include="BLL\Version2Trnasform.cs" />
     <Compile Include="DAL\LandMakerDA.cs" />
     <Compile Include="BLL\Logger.cs" />
@@ -70,6 +77,7 @@
     <Compile Include="MainFormV2.Designer.cs">
       <DependentUpon>MainFormV2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\BusinessModel.cs" />
     <Compile Include="Models\Configuartion\AttributeConfigManager.cs" />
     <Compile Include="Models\Configuartion\CheckDataConfigManager.cs" />
     <Compile Include="Models\Enum\BuildsType.cs" />
@@ -80,7 +88,8 @@
     <Compile Include="Models\Enum\SubjectType.cs" />
     <Compile Include="Models\Enum\UsingType.cs" />
     <Compile Include="Models\LandFileDetailInfo.cs" />
-    <Compile Include="Models\TransformPerporty.cs" />
+    <Compile Include="Models\Mapping.cs" />
+    <Compile Include="Models\TransformProperty.cs" />
     <Compile Include="Models\TransformResult.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="Program.cs" />
@@ -103,6 +112,12 @@
     </Compile>
     <None Include="Configuration\Attribute.config" />
     <None Include="Configuration\CheckData.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Configuration\ColumeMapping.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Configuration\ColumeMapping.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\Settings.settings">

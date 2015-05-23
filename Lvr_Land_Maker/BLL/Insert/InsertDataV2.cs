@@ -1,60 +1,58 @@
-﻿using FrameworkLibrary.DataAccess;
-using Lvr_Land_Maker.Models;
+﻿using Lvr_Land_Maker.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lvr_Land_Maker.DAL
+namespace Lvr_Land_Maker.BLL.Insert
 {
-    public class LandMakerDA
+    public class InsertDataV2 : InsertDataCore
     {
-        /// <summary>
-        /// 取得台灣鄉鎮市區資料集。
-        /// </summary>
-        /// <returns></returns>
-        public static List<LandFileDetailInfo> GetLocationInfo()
+        public override int LvrLandInsertData(List<LandFileDetailInfo> LandDetailList, out string errorMsg)
         {
-            var result = XmlDataAccess.LoadCollection<LandFileDetailInfo>("LocationInfo.xml");
-            return result == null ? null : result.ToList();
+            errorMsg = string.Empty;
+            foreach (var detail in LandDetailList)
+            {
+                switch (detail.SaleType)
+                {
+                    case Models.Enum.SaleType.Sale:
+                    case Models.Enum.SaleType.PreOrder:
+                        ////dt = FrameworkLibrary.DataAccess.Helper.DataTableHelper.ConvertToDataTable<BusinessModel>(detail.BusinessModel);
+                        this.InsertParentFile(detail, out errorMsg);
+                        break;
+                    case Models.Enum.SaleType.Leasing:
+                        break;
+                }
+            }
+
+            return 0;
         }
 
-        /// <summary>
-        /// 取得中古、預售數據(BusinessModel)
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static List<BusinessModel> GetBusinessModel(string path)
+        public int InsertParentFile(LandFileDetailInfo detail, out string errorMsg)
         {
-            ////將資料倒入DataTable
-            DataTable dt = FrameworkLibrary.DataAccess.XmlDataAccess.LoadDataTable(path);
+            errorMsg = string.Empty;
+            int state = -1;
+            if (detail.BusinessModel != null)
+            {
+                state = this.InsertBusinessModel(detail.BusinessModel);
 
-            ////將DataTable資料映射入BsuinessModel
-            var result = FrameworkLibrary.DataAccess.Helper.DataTableHelper.DataTableToList<BusinessModel>(dt);
+            }
 
-            return result;
+            return -1;
         }
 
-        /// <summary>
-        /// 取得指定路徑之內政部實價登錄資料。
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static DataTable GetLvrLandInfo(string path)
+        private int InsertBusinessModel(List<BusinessModel> model)
         {
-            return XmlDataAccess.LoadDataTable(Path.GetFileName(path), Path.GetDirectoryName(path));
-        }
+            DataTable source = FrameworkLibrary.DataAccess.Helper.DataTableHelper.ConvertToDataTable<BusinessModel>(model);
 
-        /// <summary>
-        /// 批次寫入
-        /// </summary>
-        /// <param name="source"></param>
-        public static void WriteingToDatabase(DataTable source)
-        {
+            if (source == null)
+            {
+                return -1;
+            }
+
             using (SqlConnection conn = new SqlConnection())
             {
                 //conn.ConnectionString = @"server=TON-PC\SQLEXPRESS;database=LvrLand;uid=mtap;pwd=ton@1234";
@@ -75,6 +73,7 @@ namespace Lvr_Land_Maker.DAL
                     sqlBC.DestinationTableName = "dbo.LvrLandOriginalBaseTest";
 
                     //對應資料行 
+                    sqlBC.ColumnMappings.Add("ObjectNumber", "ObjectNumber");
                     sqlBC.ColumnMappings.Add("SaleType", "SaleType");
                     sqlBC.ColumnMappings.Add("City", "City");
                     sqlBC.ColumnMappings.Add("CityCode", "CityCode");
@@ -116,17 +115,22 @@ namespace Lvr_Land_Maker.DAL
                     sqlBC.ColumnMappings.Add("CarSquareMeter", "CarSquareMeter");
                     sqlBC.ColumnMappings.Add("CarLevelGround", "CarLevelGround");
                     sqlBC.ColumnMappings.Add("CarCost", "CarCost");
+                    sqlBC.ColumnMappings.Add("Remark", "Remark");
                     sqlBC.ColumnMappings.Add("EditTime", "EditTime");
 
                     //開始寫入 
                     sqlBC.WriteToServer(source);
                 }
             }
+
+            return source.Rows.Count;
         }
 
         private static void OnSqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
         {
             ////
         }
+
+
     }
 }

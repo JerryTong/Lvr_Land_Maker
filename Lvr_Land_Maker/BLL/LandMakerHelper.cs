@@ -19,6 +19,26 @@ namespace Lvr_Land_Maker.BLL
         private static List<LandFileDetailInfo> taiwanLocationInfo = null;
         private static List<Logger> transLogger = new List<Logger>();
 
+        /// <summary>
+        /// 獲取檔案銷售類型(A、B、C)
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static SaleType GetSaleType(string token)
+        {
+            switch (token)
+            {
+                case "A":
+                    return SaleType.Sale;
+                case "B":
+                    return SaleType.Leasing;
+                case "C":
+                    return SaleType.PreOrder;
+                default:
+                    return SaleType.none;
+            }
+        }
+
         public static List<Logger> GetTransLogger()
         {
             return transLogger;
@@ -118,7 +138,7 @@ namespace Lvr_Land_Maker.BLL
             result.CityName = locationDetail.CityName;
             result.CityCode = locationDetail.CityCode;
             result.ZipCode = locationDetail.ZipCode;
-            result.FileName = withoutFileName;
+            result.ParnetFileName = withoutFileName;
             result.SaleType = ConvertSaleType(withoutFileName.Substring(withoutFileName.Length - 1, 1));
 
             return result;
@@ -233,7 +253,7 @@ namespace Lvr_Land_Maker.BLL
                 return SubjectType.Non;
             }
 
-            var type = AttributeConfigManager.Current.SubjectType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("SubjectType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
                 return (SubjectType)type.Value.ToInt(-1);
@@ -272,7 +292,7 @@ namespace Lvr_Land_Maker.BLL
                 return PartitionType.Non;
             }
 
-            var type = AttributeConfigManager.Current.PartitionType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("PartitionType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
                 return (PartitionType)type.Value.ToInt(-1);
@@ -311,7 +331,7 @@ namespace Lvr_Land_Maker.BLL
                 return BuildsType.Non;
             }
 
-            var type = AttributeConfigManager.Current.BuildsType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("BuildsType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
                 return (BuildsType)type.Value.ToInt(-1);
@@ -358,7 +378,7 @@ namespace Lvr_Land_Maker.BLL
                 return UsingType.Non;
             }
 
-            var type = AttributeConfigManager.Current.UsingType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("UsingType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
                 return (UsingType)type.Value.ToInt(-1);
@@ -403,7 +423,7 @@ namespace Lvr_Land_Maker.BLL
                 return MaterialsType.Non;
             }
 
-            var type = AttributeConfigManager.Current.MaterialsType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("MaterialsType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
                 return (MaterialsType)type.Value.ToInt(-1);
@@ -454,7 +474,7 @@ namespace Lvr_Land_Maker.BLL
                 return false;
             }
 
-            var type = AttributeConfigManager.Current.HasBool.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("HasBool").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
                 return type.Value == "1";
@@ -487,7 +507,7 @@ namespace Lvr_Land_Maker.BLL
                 return ParkingType.Non;
             }
 
-            var type = AttributeConfigManager.Current.ParkingType.Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("ParkingType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
                 return (ParkingType)type.Value.ToInt(-1);

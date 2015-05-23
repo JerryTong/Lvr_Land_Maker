@@ -11,7 +11,7 @@ namespace Lvr_Land_Maker.Models
 {
     public class LandFileDetailInfo
     {
-        public string FileName { get; set; }
+        public string ParnetFileName { get; set; }
 
         public SaleType SaleType { get; set; }
 
@@ -39,12 +39,21 @@ namespace Lvr_Land_Maker.Models
         public DataTable OriginalLvrLandTable { get; set; }
 
         /// <summary>
+        /// 預售、中古數據
+        /// </summary>
+        public List<BusinessModel> BusinessModel { get; set; }
+
+        /// <summary>
         /// 轉換後Lvr_Land數據
         /// </summary>
         public DataTable TransLvrLandTable { get; set; }
 
         #region version 2.0
-        public List<string> GroupFileNames { get; set; }
+        public string BuildFileName { get; set; }
+
+        public string LandFileName { get; set; }
+
+        public string ParkFileName { get; set; }
 
         public DataTable OriginalBuildTable { get; set; }
 

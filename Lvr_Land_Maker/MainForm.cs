@@ -24,7 +24,7 @@ namespace Lvr_Land_Maker
 
         public void NewStart(List<string> filesPath)
         {
-            TransformPerporty perporty = new TransformPerporty();
+            TransformProperty perporty = new TransformProperty();
             perporty.FilesName = filesPath;
             var result = new VersionTrnasfrom().Run(perporty);
 
@@ -89,7 +89,7 @@ namespace Lvr_Land_Maker
             foreach (var detail in lvrLandList)
             {
                 ////解析檔案內容
-                statusLabel.AsyncText(string.Format("正在檢查檔案-{0} 內容...", detail.FileName));
+                statusLabel.AsyncText(string.Format("正在檢查檔案-{0} 內容...", detail.ParnetFileName));
 
                 string errMessage = string.Empty;
                 detail.TransLvrLandTable = process.TransFormatLvrLandData(detail, out errMessage);
@@ -98,7 +98,7 @@ namespace Lvr_Land_Maker
                     foreach (var row in detail.TransLvrLandTable.AsEnumerable().ToList())
                     {
                         bool isAccuracy = process.CheckTransDataRowsAccuracy(row, detail.SaleType, out errMessage);
-                        if (!isAccuracy && MessageBox.Show(string.Format("檔案:{0}\n錯誤分析:{1}\n\n[詢問] 是否忽略寫入此筆資料?", detail.FileName, errMessage), "實價登錄資料轉換驗證錯誤", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes) 
+                        if (!isAccuracy && MessageBox.Show(string.Format("檔案:{0}\n錯誤分析:{1}\n\n[詢問] 是否忽略寫入此筆資料?", detail.ParnetFileName, errMessage), "實價登錄資料轉換驗證錯誤", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Yes) 
                         {
                             row.SetField<string>("IsAdd", "0");
                         }
@@ -109,13 +109,13 @@ namespace Lvr_Land_Maker
                 
                 if (!string.IsNullOrEmpty(errMessage))
                 {
-                    MessageBox.Show(string.Format("檔案:{0}\n錯誤分析:{1}", detail.FileName, errMessage), "實價登錄資料轉換驗證錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format("檔案:{0}\n錯誤分析:{1}", detail.ParnetFileName, errMessage), "實價登錄資料轉換驗證錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     resultLogger.Add(new Logger
                     {
                         Type = LoggerType.DataException,
-                        Message = string.Format("檔案:{0}\n錯誤分析:{1}", detail.FileName, errMessage),
-                        Path = detail.FileName,
+                        Message = string.Format("檔案:{0}\n錯誤分析:{1}", detail.ParnetFileName, errMessage),
+                        Path = detail.ParnetFileName,
                     });
 
                     AppendLoggerMsg(resultLogger);
@@ -126,7 +126,7 @@ namespace Lvr_Land_Maker
 
             lvrLandList.ForEach(land =>
             {
-                statusLabel.AsyncText(string.Format("正在寫入檔案-{0} 內容...", land.FileName));
+                statusLabel.AsyncText(string.Format("正在寫入檔案-{0} 內容...", land.ParnetFileName));
                 dataCount += land.TransLvrLandTable != null ? land.TransLvrLandTable.Rows.Count : 0;
                 resultLogger.Add(process.LandInsertToDataBase(land));
 

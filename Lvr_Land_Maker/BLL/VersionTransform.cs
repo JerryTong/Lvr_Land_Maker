@@ -10,7 +10,7 @@ namespace Lvr_Land_Maker.BLL
 {
     public class VersionTrnasfrom : TransformBase
     {
-        public TransformResult Run(TransformPerporty perporty)
+        public TransformResult Run(TransformProperty perporty)
         {
             string errMessage = string.Empty;
             this.Transform(perporty);
@@ -67,7 +67,7 @@ namespace Lvr_Land_Maker.BLL
         /// </summary>
         /// <param name="filePaths"></param>
         /// <returns></returns>
-        private List<LandFileDetailInfo> GetLvrLandDetailInfo(List<string> filePaths)
+        public override List<LandFileDetailInfo> GetLvrLandDetailInfo(List<string> filePaths)
         {
             var result = new List<LandFileDetailInfo>();
             foreach (var path in filePaths)
