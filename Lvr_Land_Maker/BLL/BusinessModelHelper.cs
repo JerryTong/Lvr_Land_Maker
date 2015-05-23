@@ -5,11 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lvr_Land_Maker.Models.Enum;
+using Lvr_Land_Maker.Models.Configuartion;
 
 namespace Lvr_Land_Maker.BLL
 {
     public static class BusinessModelHelper
     {
+        private static string FORMAT_EXCEPTION_MSG = "轉換{0}({1})屬性時發現未知名稱: ' {2} ' ";
+
         public static BusinessModel Init(this BusinessModel model, LandFileDetailInfo detail)
         {
             model.City = detail.CityCode;
@@ -20,24 +24,19 @@ namespace Lvr_Land_Maker.BLL
             model.CompletedDate = ConvertCompleteDateTime(model.InternalCompletedDate);
             model.TradeDate = ConvertTradeDateTime(model.InternalTradeDate);
             model.TradeYear = ConvertTradeYear(model.InternalTradeDate);
-        
 
-            model.SubjectCode = -1;
+            model.SubjectCode = ConvertSubjectType(model.Subject).ToInt(-1);
+            model.PartitionCode = ConvertPartitionType(model.Partition).ToInt(-1);
+            model.BuildsTypeCode = ConvertBuildsType(model.BuildsType).ToInt(-1);
+            model.CarTypeCode = ConvertParkingType(model.CarParkType).ToInt(-1);
+            model.UsingCode = ConvertUsingType(model.Using).ToInt(-1);
+            model.MaterialsCode = ConvertMaterialsType(model.Materials).ToInt(-1);
 
-            model.PartitionCode = -1;
+            model.LandLevelGround = CalculateSMToLevelGround(model.LandSquareMeter);
+            model.BuildsLevelGround = CalculateSMToLevelGround(model.BuildsLevelGround);
+            model.CarParkLevelGround = CalculateSMToLevelGround(model.CarParkLevelGround);
 
-            model.LandLevelGround = -1;
-
-            model.BuildsTypeCode = -1;
-
-            model.BuildsLevelGround = -1;
-
-            model.LevelGroundCost = -1;
-
-            model.CarTypeCode = -1;
-
-            model.CarLevelGround = -1;
-
+            ////model.LevelGroundCost = -1;
             return model;
         }
 
@@ -165,5 +164,183 @@ namespace Lvr_Land_Maker.BLL
                 throw new ArithmeticException(string.Format("Function on ConvertCompleteDateTime() - value: {0}\n{1}\n{2}", value, ex.Message, ex.StackTrace));
             }
         }
+
+        #region LvrLandData to DataBase Table Helper Function.
+        /// <summary>
+        /// Convert to Subject Type.(交易標的)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static SubjectType ConvertSubjectType(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return SubjectType.Non;
+            }
+
+            var type = AttributeConfigManager.GetAttribute("SubjectType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (SubjectType)type.PropertyId.ToInt(-1);
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "交易標的", "SubjectType", value));
+        }
+
+        /// <summary>
+        /// Convert Partition Type.(都市土地使用分區)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static PartitionType ConvertPartitionType(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return PartitionType.Non;
+            }
+
+            var type = AttributeConfigManager.GetAttribute("PartitionType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (PartitionType)type.PropertyId.ToInt(-1);
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "都市土地使用分區", "PartitionType", value));
+        }
+
+        /// <summary>
+        /// Convert Build Type.(建物型態)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static BuildsType ConvertBuildsType(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return BuildsType.Non;
+            }
+
+            var type = AttributeConfigManager.GetAttribute("BuildsType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (BuildsType)type.PropertyId.ToInt(-1);
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "建物型態", "BuildsType", value));
+        }
+
+        /// <summary>
+        /// Convert Using Type.(主要用途)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static UsingType ConvertUsingType(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return UsingType.Non;
+            }
+
+            var type = AttributeConfigManager.GetAttribute("UsingType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (UsingType)type.PropertyId.ToInt(-1);
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "主要用途", "UsingType", value));
+        }
+
+        /// <summary>
+        /// Convert Materials Type.(主要建材)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static MaterialsType ConvertMaterialsType(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return MaterialsType.Non;
+            }
+
+            var type = AttributeConfigManager.GetAttribute("MaterialsType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (MaterialsType)type.PropertyId.ToInt(-1);
+            }
+
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "主要建材", "MaterialsType", value));
+        }
+
+
+        /// <summary>
+        /// Convert bool Type.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static bool ConvertBool(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            var type = AttributeConfigManager.GetAttribute("HasBool").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return type.PropertyId == 1;
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "布林值轉換", "Had-Bool", value));
+        }
+
+        /// <summary>
+        /// Convert parking Type.(車位類別)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static ParkingType ConvertParkingType(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return ParkingType.Non;
+            }
+
+            var type = AttributeConfigManager.GetAttribute("ParkingType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            if (type != null)
+            {
+                return (ParkingType)type.PropertyId.ToInt(-1);
+            }
+
+            throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "車位類別", "ParkingType", value));
+        }
+
+        
+        /// <summary>
+        /// Convert complete date time.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static decimal ConvertCostSM2LG(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return default(decimal);
+            }
+
+            decimal original = value.ToDecimal(0.0M);
+            return (original * 0.3025M).ToDecimal(0.0M);
+        }
+
+        /// <summary>
+        /// Square Meter to Level Ground.(平方公尺 -- 坪)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static decimal CalculateSMToLevelGround(decimal value)
+        {
+            return (decimal)(value * 0.3025M);
+        }
+        #endregion
     }
 }

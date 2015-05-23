@@ -92,14 +92,14 @@ namespace Lvr_Land_Maker.Models
         [XmlElement(Mapping.SquareMeterCost)]
         public decimal SquareMeterCost { get; set; }
 
-        [XmlElement(Mapping.CarType)]
-        public string CarType { get; set; }
+        [XmlElement(Mapping.CarParkType)]
+        public string CarParkType { get; set; }
 
-        [XmlElement(Mapping.CarSquareMeter)]
-        public decimal CarSquareMeter { get; set; }
+        [XmlElement(Mapping.CarParkSquareMeter)]
+        public decimal CarParkSquareMeter { get; set; }
 
-        [XmlElement(Mapping.CarCost)]
-        public decimal CarCost { get; set; }
+        [XmlElement(Mapping.CarParkCost)]
+        public decimal CarParkCost { get; set; }
 
         [XmlElement(Mapping.Remark)]
         public string Remark { get; set; }
@@ -135,21 +135,21 @@ namespace Lvr_Land_Maker.Models
 
         public int PartitionCode { get; set; }
 
-        public int LandLevelGround { get; set; }
+        public decimal LandLevelGround { get; set; }
 
         public int BuildsTypeCode { get; set; }
 
-        public int BuildsLevelGround { get; set; }
+        public decimal BuildsLevelGround { get; set; }
 
         public int UsingCode { get; set;}
 
         public int MaterialsCode { get; set; }
 
-        public int LevelGroundCost { get; set; }
+        public decimal LevelGroundCost { get; set; }
 
         public int CarTypeCode { get; set; }
 
-        public int CarLevelGround { get; set; }
+        public decimal CarParkLevelGround { get; set; }
 
         public DateTime CompletedDate { get; set; }
 

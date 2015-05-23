@@ -256,7 +256,7 @@ namespace Lvr_Land_Maker.BLL
             var type = AttributeConfigManager.GetAttribute("SubjectType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
-                return (SubjectType)type.Value.ToInt(-1);
+                return (SubjectType)type.PropertyId.ToInt(-1);
             }
 
             throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "交易標的", "SubjectType", value));
@@ -295,7 +295,7 @@ namespace Lvr_Land_Maker.BLL
             var type = AttributeConfigManager.GetAttribute("PartitionType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
-                return (PartitionType)type.Value.ToInt(-1);
+                return (PartitionType)type.PropertyId.ToInt(-1);
             }
 
             throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "都市土地使用分區", "PartitionType", value));
@@ -334,7 +334,7 @@ namespace Lvr_Land_Maker.BLL
             var type = AttributeConfigManager.GetAttribute("BuildsType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
-                return (BuildsType)type.Value.ToInt(-1);
+                return (BuildsType)type.PropertyId.ToInt(-1);
             }
 
             throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "建物型態", "BuildsType", value));
@@ -381,7 +381,7 @@ namespace Lvr_Land_Maker.BLL
             var type = AttributeConfigManager.GetAttribute("UsingType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
-                return (UsingType)type.Value.ToInt(-1);
+                return (UsingType)type.PropertyId.ToInt(-1);
             }
 
             throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "主要用途", "UsingType", value));
@@ -426,7 +426,7 @@ namespace Lvr_Land_Maker.BLL
             var type = AttributeConfigManager.GetAttribute("MaterialsType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
-                return (MaterialsType)type.Value.ToInt(-1);
+                return (MaterialsType)type.PropertyId.ToInt(-1);
             }
 
 
@@ -477,7 +477,7 @@ namespace Lvr_Land_Maker.BLL
             var type = AttributeConfigManager.GetAttribute("HasBool").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
-                return type.Value == "1";
+                return type.PropertyId == 1;
             }
 
             throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "布林值轉換", "Had-Bool", value));
@@ -510,7 +510,7 @@ namespace Lvr_Land_Maker.BLL
             var type = AttributeConfigManager.GetAttribute("ParkingType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
             if (type != null)
             {
-                return (ParkingType)type.Value.ToInt(-1);
+                return (ParkingType)type.PropertyId.ToInt(-1);
             }
 
             throw new FormatException(string.Format(FORMAT_EXCEPTION_MSG, "車位類別", "ParkingType", value));

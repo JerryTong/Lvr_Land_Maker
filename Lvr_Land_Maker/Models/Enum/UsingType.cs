@@ -32,7 +32,7 @@ namespace Lvr_Land_Maker.Models.Enum
         /// <summary>
         /// 農業用
         /// </summary>
-        FarmHouse = 5, 
+        Farm = 5, 
 
         /// <summary>
         /// 住商用
@@ -65,7 +65,7 @@ namespace Lvr_Land_Maker.Models.Enum
         ParkingSpace = 11,
         
         /// <summary>
-        /// 見其他登記事項
+        /// 見其他登記事項/見其它登記事項
         /// </summary>
         Other = 99,
         

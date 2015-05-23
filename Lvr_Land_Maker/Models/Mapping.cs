@@ -126,17 +126,17 @@ namespace Lvr_Land_Maker.Models
         /// <summary>
         /// 車位類別
         /// </summary>
-        public const string CarType = "車位類別";
+        public const string CarParkType = "車位類別";
 
         /// <summary>
         /// 車位移轉總面積平方公尺
         /// </summary>
-        public const string CarSquareMeter = "車位移轉總面積平方公尺";
+        public const string CarParkSquareMeter = "車位移轉總面積平方公尺";
 
         /// <summary>
         /// 車位總價元
         /// </summary>
-        public const string CarCost = "車位總價元";
+        public const string CarParkCost = "車位總價元";
 
         /// <summary>
         /// 備註

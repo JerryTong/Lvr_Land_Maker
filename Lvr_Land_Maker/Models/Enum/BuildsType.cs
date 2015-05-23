@@ -14,19 +14,19 @@ namespace Lvr_Land_Maker.Models.Enum
         /// </summary>
         Detached = 1,
         /// <summary>
-        /// 套房
+        /// 套房(1房1廳1衛)
         /// </summary>
         Suite = 2,
         /// <summary>
-        /// 公寓
+        /// 公寓(5樓含以下無電梯)
         /// </summary>
         Apartment = 3,
         /// <summary>
-        /// 華夏(10樓以下電梯)
+        /// 華廈(10層含以下有電梯)
         /// </summary>
         Building_10 = 4,
         /// <summary>
-        /// 大樓(10樓以上電梯)
+        /// 住宅大樓(11層含以上有電梯)
         /// </summary>
         LargeBuilding = 5,
         /// <summary>
