@@ -178,7 +178,7 @@ namespace Lvr_Land_Maker.BLL
                 return SubjectType.Non;
             }
 
-            var type = AttributeConfigManager.GetAttribute("SubjectType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("SubjectType").Items.Where(s => s.Name_CH.Equals(value) || s.ChildPropertyNameList.Contains(value)).FirstOrDefault();
             if (type != null)
             {
                 return (SubjectType)type.PropertyId.ToInt(-1);
@@ -199,7 +199,7 @@ namespace Lvr_Land_Maker.BLL
                 return PartitionType.Non;
             }
 
-            var type = AttributeConfigManager.GetAttribute("PartitionType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("PartitionType").Items.Where(s => s.Name_CH.Equals(value) || s.ChildPropertyNameList.Contains(value)).FirstOrDefault();
             if (type != null)
             {
                 return (PartitionType)type.PropertyId.ToInt(-1);
@@ -220,7 +220,7 @@ namespace Lvr_Land_Maker.BLL
                 return BuildsType.Non;
             }
 
-            var type = AttributeConfigManager.GetAttribute("BuildsType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("BuildsType").Items.Where(s => s.Name_CH.Equals(value) || s.ChildPropertyNameList.Contains(value)).FirstOrDefault();
             if (type != null)
             {
                 return (BuildsType)type.PropertyId.ToInt(-1);
@@ -241,7 +241,7 @@ namespace Lvr_Land_Maker.BLL
                 return UsingType.Non;
             }
 
-            var type = AttributeConfigManager.GetAttribute("UsingType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("UsingType").Items.Where(s => s.Name_CH.Equals(value) || s.ChildPropertyNameList.Contains(value)).FirstOrDefault();
             if (type != null)
             {
                 return (UsingType)type.PropertyId.ToInt(-1);
@@ -262,7 +262,7 @@ namespace Lvr_Land_Maker.BLL
                 return MaterialsType.Non;
             }
 
-            var type = AttributeConfigManager.GetAttribute("MaterialsType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("MaterialsType").Items.Where(s => s.Name_CH.Equals(value) || s.ChildPropertyNameList.Contains(value)).FirstOrDefault();
             if (type != null)
             {
                 return (MaterialsType)type.PropertyId.ToInt(-1);
@@ -306,7 +306,7 @@ namespace Lvr_Land_Maker.BLL
                 return ParkingType.Non;
             }
 
-            var type = AttributeConfigManager.GetAttribute("ParkingType").Items.Where(s => s.Name.Equals(value)).FirstOrDefault();
+            var type = AttributeConfigManager.GetAttribute("ParkingType").Items.Where(s => s.Name_CH.Equals(value) || s.ChildPropertyNameList.Contains(value)).FirstOrDefault();
             if (type != null)
             {
                 return (ParkingType)type.PropertyId.ToInt(-1);

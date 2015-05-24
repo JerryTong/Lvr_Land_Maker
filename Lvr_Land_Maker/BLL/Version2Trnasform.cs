@@ -10,12 +10,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Lvr_Land_Maker.BLL
 {
     public class Version2Trnasform : TransformBase
     {
-        public TransformResult NewRun(TransformProperty property)
+        public TransformResult NewRun(Form form, TransformProperty property)
         {
             string errorMsg = string.Empty;
             if (!new ValidateV2().Core(property, out errorMsg))

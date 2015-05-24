@@ -19,6 +19,7 @@ namespace Lvr_Land_Maker
 	                                    ,p.PropertyId
 	                                    ,p.PropertyName
 	                                    ,p.PropertyNameCH
+                                        ,p.ChildPropertyName
                                     FROM LvrLand.dbo.LvrLandProperty as p
                                     INNER JOIN LvrLand.dbo.GroupProperty as g
 	                                    ON p.GroupPropertyId = g.GroupPropertyId
@@ -55,7 +56,8 @@ namespace Lvr_Land_Maker
                         GroupId = item.GroupPropertyId,
                         Name = item.PropertyName,
                         Name_CH = item.PropertyNameCH,
-                        PropertyId = item.PropertyId
+                        PropertyId = item.PropertyId,
+                        ChildPropertyName = item.ChildPropertyName == null ? string.Empty : item.ChildPropertyName
                     });
                 }
 
@@ -155,7 +157,10 @@ namespace Lvr_Land_Maker
                     if (columns.Contains(propertyInfo.Name))
                     {
                         // Fill the data into the property
-                        propertyInfo.SetValue(ob, dr[propertyInfo.Name]);
+                        if (dr[propertyInfo.Name] != System.DBNull.Value)
+                        {
+                            propertyInfo.SetValue(ob, dr[propertyInfo.Name]);
+                        }
                     }
                 }
 
@@ -227,6 +232,8 @@ namespace Lvr_Land_Maker
         public string PropertyName { get; set; }
 
         public string PropertyNameCH { get; set; }
+
+        public string ChildPropertyName { get; set; }
     }
 
 

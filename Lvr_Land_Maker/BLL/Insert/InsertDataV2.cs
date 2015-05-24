@@ -110,11 +110,11 @@ namespace Lvr_Land_Maker.BLL.Insert
                     sqlBC.ColumnMappings.Add("Cost", "Cost");
                     sqlBC.ColumnMappings.Add("SquareMeterCost", "SquareMeterCost");
                     sqlBC.ColumnMappings.Add("LevelGroundCost", "LevelGroundCost");
-                    sqlBC.ColumnMappings.Add("CarType", "CarType");
+                    sqlBC.ColumnMappings.Add("CarParkType", "CarType");
                     sqlBC.ColumnMappings.Add("CarTypeCode", "CarTypeCode");
-                    sqlBC.ColumnMappings.Add("CarSquareMeter", "CarSquareMeter");
-                    sqlBC.ColumnMappings.Add("CarLevelGround", "CarLevelGround");
-                    sqlBC.ColumnMappings.Add("CarCost", "CarCost");
+                    sqlBC.ColumnMappings.Add("CarParkSquareMeter", "CarSquareMeter");
+                    sqlBC.ColumnMappings.Add("CarParkLevelGround", "CarLevelGround");
+                    sqlBC.ColumnMappings.Add("CarParkCost", "CarCost");
                     sqlBC.ColumnMappings.Add("Remark", "Remark");
                     sqlBC.ColumnMappings.Add("EditTime", "EditTime");
 
