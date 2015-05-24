@@ -137,10 +137,16 @@ namespace Lvr_Land_Maker.BLL
 
             try
             {
+                ////ex:0781014
+                ////Year = 078 + 1911 = 1989
+                ////Month = 10. when is null than '01'.
+                ////date = 14. when is null than '01'.
+                ////當日期不符預期預設為1/1.
                 string year = (value.Substring(0, 3).ToInt(0) + 1911).ToString();
                 string month = (value.Length >= 5) ? value.Substring(3, 2) : "01";
                 string date = (value.Length >= 7) ? value.Substring(5, 2) : "01";
 
+                ////閏年計算
                 bool isLeapYear = false;
                 if (month == "02")
                 {
@@ -150,11 +156,18 @@ namespace Lvr_Land_Maker.BLL
                         isLeapYear = true;
                     }
 
+                    ////非閏年二月份不可超過28日
                     if (!isLeapYear && date.ToInt(-1) > 28)
                     {
                         date = "28";
                     }
                 }
+
+                ////驗證year, month, date 是否皆為數字
+                int temp = -1;
+                year = Int32.TryParse(year, out temp) ? year : "1911";
+                month = Int32.TryParse(month, out temp) ? month : "01";
+                date = Int32.TryParse(date, out temp) ? date : "01";
 
                 IFormatProvider culture = new System.Globalization.CultureInfo("zh-TW", true);
                 return DateTime.ParseExact(string.Format("{0}{1}{2}", year, month, date), "yyyyMMdd", culture);

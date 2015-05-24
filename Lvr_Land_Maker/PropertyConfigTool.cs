@@ -1,6 +1,7 @@
 ﻿using Lvr_Land_Maker.Models.Configuartion;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -71,8 +72,8 @@ namespace Lvr_Land_Maker
         {
             using (SqlConnection conn = new SqlConnection())
             {
-                conn.ConnectionString = @"server=TON-PC\SQLEXPRESS;database=LvrLand;uid=tong;pwd=123456";
-                ////conn.ConnectionString = ConfigurationManager.ConnectionStrings["Lvr_Land"].ConnectionString;
+                ////conn.ConnectionString = @"server=TON-PC\SQLEXPRESS;database=LvrLand;uid=tong;pwd=123456";
+                conn.ConnectionString = ConfigurationManager.ConnectionStrings["Tong"].ConnectionString;
                 try
                 {
                     cmd.Connection = conn;

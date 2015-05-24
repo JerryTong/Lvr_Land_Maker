@@ -1,6 +1,7 @@
 ﻿using Lvr_Land_Maker.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -55,8 +56,7 @@ namespace Lvr_Land_Maker.BLL.Insert
 
             using (SqlConnection conn = new SqlConnection())
             {
-                //conn.ConnectionString = @"server=TON-PC\SQLEXPRESS;database=LvrLand;uid=mtap;pwd=ton@1234";
-                conn.ConnectionString = @"server=TON-PC\SQLEXPRESS;database=LvrLand;uid=tong;pwd=123456";
+                conn.ConnectionString = ConfigurationManager.ConnectionStrings["Tong"].ConnectionString;
                 conn.Open();
                 using (SqlBulkCopy sqlBC = new SqlBulkCopy(conn))
                 {
