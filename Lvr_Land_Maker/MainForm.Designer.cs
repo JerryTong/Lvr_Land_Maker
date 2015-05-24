@@ -235,6 +235,7 @@
             this.progressBar1.Location = new System.Drawing.Point(0, 605);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(1215, 24);
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar1.TabIndex = 6;
             // 
             // statusLabel

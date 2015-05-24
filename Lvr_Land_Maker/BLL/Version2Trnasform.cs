@@ -16,28 +16,31 @@ namespace Lvr_Land_Maker.BLL
 {
     public class Version2Trnasform : TransformBase
     {
-        public TransformResult NewRun(Form form, TransformProperty property)
+        public TransformResult Run(MainFormV2 formV2, TransformProperty property)
         {
             string errorMsg = string.Empty;
+
+            ////驗證選取檔案類型
             if (!new ValidateV2().Core(property, out errorMsg))
             {
-                return new TransformResult { Message = property.ErrorMessage };
+                return new TransformResult { Message = errorMsg };
             }
 
+            ////轉換檔案內容
             List<LandFileDetailInfo> LandDetailList = new TransformV2().Core(property, out errorMsg);
-            if (LandDetailList == null)
+            if (LandDetailList == null || !string.IsNullOrEmpty(errorMsg))
             {
-                return new TransformResult { Message = property.ErrorMessage };
+                return new TransformResult { Message = errorMsg };
             }
 
             int state = new InsertDataV2().Core(LandDetailList, out errorMsg);
             if (state == -1)
             {
-                return new TransformResult { Message = property.ErrorMessage };
+                return new TransformResult { Message = errorMsg };
             }
 
 
-            return null;
+            return new TransformResult { Message = "Success" };
         }
 
         public TransformResult Run(TransformProperty perporty)

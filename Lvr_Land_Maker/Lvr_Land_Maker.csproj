@@ -111,6 +111,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Configuration\Attribute.config" />
     <None Include="Configuration\CheckData.config">
       <SubType>Designer</SubType>

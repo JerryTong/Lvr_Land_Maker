@@ -28,7 +28,7 @@ namespace Lvr_Land_Maker.BLL.Insert
                 }
             }
 
-            return 0;
+            return 1;
         }
 
         public int InsertParentFile(LandFileDetailInfo detail, out string errorMsg)
