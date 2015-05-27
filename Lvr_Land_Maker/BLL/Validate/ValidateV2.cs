@@ -62,12 +62,16 @@ namespace Lvr_Land_Maker.BLL.Validate
                 FilesDict dict = this.BuildFilesDict(parentName, token[3], original);
         
                 bool isAccuracy = this.ValidateFileDict(dict, token[3]);
-                if (isAccuracy == true)
+                if (!isAccuracy)
                 {
-                    property.FilesDirectory.Add(dict);
-                    ////errorMsg = string.Format("主資料:{0}, 找不到其他附加相關檔案{1}。", parentName, token[3] == "B" ? "Land, Park" : "Build, Land, Park");
-                    ////return false;
+                    errorMsg = string.Format("檔案不齊全。\n主檔案:{0}\n建物:{1}\n土地:{2}\n停車位:{3}", dict.ParentFile,
+                                                                                                        dict.BuildFile,
+                                                                                                        dict.LandFile,
+                                                                                                        dict.ParkFile);
+                    return false;
                 }
+
+                property.FilesDirectory.Add(dict);
             }
 
 

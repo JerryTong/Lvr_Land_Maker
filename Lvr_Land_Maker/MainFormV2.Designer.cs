@@ -96,11 +96,11 @@
             this.richTextBox1.BackColor = System.Drawing.SystemColors.Info;
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.richTextBox1.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.ForeColor = System.Drawing.Color.Brown;
-            this.richTextBox1.Location = new System.Drawing.Point(0, 348);
+            this.richTextBox1.ForeColor = System.Drawing.Color.Black;
+            this.richTextBox1.Location = new System.Drawing.Point(0, 413);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(1084, 227);
+            this.richTextBox1.Size = new System.Drawing.Size(1084, 162);
             this.richTextBox1.TabIndex = 13;
             this.richTextBox1.Text = "none";
             // 
@@ -127,7 +127,7 @@
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(0, 24);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1084, 324);
+            this.pictureBox1.Size = new System.Drawing.Size(1084, 389);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;

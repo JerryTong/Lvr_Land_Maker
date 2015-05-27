@@ -65,6 +65,7 @@
     <Compile Include="Extension\LabelExtension.cs" />
     <Compile Include="Extension\ProgressBarExtension.cs" />
     <Compile Include="Extension\RickTextBoxExtension.cs" />
+    <Compile Include="BLL\LoggerBL.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -139,6 +140,7 @@
   <ItemGroup>
     <Content Include="SQLCommand\CREATE TABLE [dbo].[Location].sql" />
     <Content Include="SQLCommand\CREATE TABLE [dbo].[LvrLandOriginalBase].sql" />
+    <Content Include="SQLCommand\INSERT TO LvrLandOrigainalBase.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -119,11 +119,11 @@ namespace Lvr_Land_Maker.Models
 
         public int ZipCode { get; set; }
 
-        public DateTime EditTime
+        public string EditTime
         {
             get
             {
-                return DateTime.Now;
+                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
             }
         }
         #endregion
