@@ -143,6 +143,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Name = "MainFormV2";
             this.Text = "實價登錄轉換工具 v0.2.0";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFormV2_FormClosed);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
