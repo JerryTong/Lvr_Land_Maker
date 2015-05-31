@@ -143,7 +143,10 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="SQLCommand\CREATE TABLE [dbo].[Location].sql" />
+    <Content Include="SQLCommand\CREATE TABLE [dbo].[LvrLandBuild].sql" />
+    <Content Include="SQLCommand\CREATE TABLE [dbo].[LvrLandLand].sql" />
     <Content Include="SQLCommand\CREATE TABLE [dbo].[LvrLandOriginalBase].sql" />
+    <Content Include="SQLCommand\CREATE TABLE [dbo].[LvrLandPark].sql" />
     <Content Include="SQLCommand\INSERT TO LvrLandOrigainalBase.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
