@@ -39,6 +39,8 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.同步至正式環境ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AsyncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -48,7 +50,8 @@
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mainToolStripMenuItem,
-            this.工具ToolStripMenuItem});
+            this.工具ToolStripMenuItem,
+            this.同步至正式環境ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1084, 24);
@@ -132,6 +135,21 @@
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
             // 
+            // 同步至正式環境ToolStripMenuItem
+            // 
+            this.同步至正式環境ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AsyncToolStripMenuItem});
+            this.同步至正式環境ToolStripMenuItem.Name = "同步至正式環境ToolStripMenuItem";
+            this.同步至正式環境ToolStripMenuItem.Size = new System.Drawing.Size(116, 20);
+            this.同步至正式環境ToolStripMenuItem.Text = "@同步至正式環境";
+            // 
+            // AsyncToolStripMenuItem
+            // 
+            this.AsyncToolStripMenuItem.Name = "AsyncToolStripMenuItem";
+            this.AsyncToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.AsyncToolStripMenuItem.Text = "同步";
+            this.AsyncToolStripMenuItem.Click += new System.EventHandler(this.AsyncToolStripMenuItem_Click);
+            // 
             // MainFormV2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -164,5 +182,7 @@
         private System.Windows.Forms.ToolStripMenuItem 工具ToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolStripMenuItem UpdateAttributeconfigToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 同步至正式環境ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem AsyncToolStripMenuItem;
     }
 }

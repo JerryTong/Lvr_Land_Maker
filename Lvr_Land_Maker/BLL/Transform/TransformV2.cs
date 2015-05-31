@@ -31,7 +31,11 @@ namespace Lvr_Land_Maker.BLL.Transform
 
             foreach (var detail in result)
             {
-                detail.BusinessModel = LandMakerDA.GetBusinessModel(detail.ParnetFileName);
+                detail.BusinessModel = LandMakerDA.GetBusinessModel(detail.ParentFileName);
+                detail.BuildModel = string.IsNullOrEmpty(detail.BuildFileName) ? null : LandMakerDA.GetLvrBuildModel(detail.BuildFileName).Where(b => !string.IsNullOrEmpty(b.Number)).ToList();
+                detail.LandModel = string.IsNullOrEmpty(detail.LandFileName) ? null : LandMakerDA.GetLvrLandModel(detail.LandFileName).Where(b => !string.IsNullOrEmpty(b.Number)).ToList();
+                detail.ParkModel = string.IsNullOrEmpty(detail.ParkFileName) ? null : LandMakerDA.GetLvrParkModel(detail.ParkFileName).Where(b => !string.IsNullOrEmpty(b.Number)).ToList();
+
                 foreach (var businessModel in detail.BusinessModel)
                 {
                     try

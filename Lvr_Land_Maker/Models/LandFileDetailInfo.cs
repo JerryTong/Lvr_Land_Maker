@@ -11,7 +11,7 @@ namespace Lvr_Land_Maker.Models
 {
     public class LandFileDetailInfo
     {
-        public string ParnetFileName { get; set; }
+        public string ParentFileName { get; set; }
 
         public SaleType SaleType { get; set; }
 
@@ -42,6 +42,21 @@ namespace Lvr_Land_Maker.Models
         /// 預售、中古數據
         /// </summary>
         public List<BusinessModel> BusinessModel { get; set; }
+
+        /// <summary>
+        /// 建物數據
+        /// </summary>
+        public List<LvrBuildModel> BuildModel { get; set; }
+
+        /// <summary>
+        /// 土地數據
+        /// </summary>
+        public List<LvrLandModel> LandModel { get; set; }
+
+        /// <summary>
+        /// 停車數據
+        /// </summary>
+        public List<LvrParkModel> ParkModel { get; set; }
 
         /// <summary>
         /// 轉換後Lvr_Land數據

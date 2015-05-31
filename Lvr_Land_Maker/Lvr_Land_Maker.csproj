@@ -81,6 +81,7 @@
     <Compile Include="Models\BusinessModel.cs" />
     <Compile Include="Models\Configuartion\AttributeConfigManager.cs" />
     <Compile Include="Models\Configuartion\CheckDataConfigManager.cs" />
+    <Compile Include="Models\Configuartion\DataCommandManager.cs" />
     <Compile Include="Models\Enum\BuildsType.cs" />
     <Compile Include="Models\Enum\CarType.cs" />
     <Compile Include="Models\Enum\MaterialsType.cs" />
@@ -89,6 +90,9 @@
     <Compile Include="Models\Enum\SubjectType.cs" />
     <Compile Include="Models\Enum\UsingType.cs" />
     <Compile Include="Models\LandFileDetailInfo.cs" />
+    <Compile Include="Models\LvrLandModel.cs" />
+    <Compile Include="Models\LvrBuildModel.cs" />
+    <Compile Include="Models\LvrParkModel.cs" />
     <Compile Include="Models\Mapping.cs" />
     <Compile Include="Models\TransformProperty.cs" />
     <Compile Include="Models\TransformResult.cs" />

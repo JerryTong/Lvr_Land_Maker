@@ -39,6 +39,21 @@ namespace Lvr_Land_Maker.BLL
             }
         }
 
+        public static string GetSaleTypeCode(SaleType saleType)
+        {
+            switch (saleType)
+            {
+                case SaleType.Sale:
+                    return "A";
+                case SaleType.Leasing:
+                    return "B";
+                case SaleType.PreOrder:
+                    return "C";
+                default:
+                    return "NONE";
+            }
+        }
+
         public static List<Logger> GetTransLogger()
         {
             return transLogger;
@@ -138,7 +153,7 @@ namespace Lvr_Land_Maker.BLL
             result.CityName = locationDetail.CityName;
             result.CityCode = locationDetail.CityCode;
             result.ZipCode = locationDetail.ZipCode;
-            result.ParnetFileName = withoutFileName;
+            result.ParentFileName = withoutFileName;
             result.SaleType = ConvertSaleType(withoutFileName.Substring(withoutFileName.Length - 1, 1));
 
             return result;

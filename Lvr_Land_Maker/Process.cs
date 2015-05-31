@@ -233,7 +233,7 @@ namespace Lvr_Land_Maker
                     loggerResult = new Logger
                     {
                         Type = LoggerType.AppMessage,
-                        Path = landDetail.ParnetFileName,
+                        Path = landDetail.ParentFileName,
                         Message = landDetail.SaleType == SaleType.Sale ? string.Format(SALE_DATA, WRITEING, SUCCESSFUL)
                                                                                 : string.Format(PREORDER_DATA, WRITEING, SUCCESSFUL),
                         InternalDescription = string.Empty,
@@ -246,7 +246,7 @@ namespace Lvr_Land_Maker
                     loggerResult = new Logger
                     {
                         Type = LoggerType.DataException,
-                        Path = landDetail.ParnetFileName,
+                        Path = landDetail.ParentFileName,
                         Message = landDetail.SaleType == SaleType.Sale ? string.Format(NONE_LANDDATA, landDetail.CityName, "買賣")
                                                                                 : string.Format(NONE_LANDDATA, landDetail.CityName, "預售"),
                         InternalDescription = string.Empty,
@@ -259,7 +259,7 @@ namespace Lvr_Land_Maker
                 loggerResult = new Logger
                 {
                     Type = LoggerType.DataException,
-                    Path = landDetail.ParnetFileName,
+                    Path = landDetail.ParentFileName,
                     Message = string.Format(LEASING, IGNORE, WRITEING),
                     InternalDescription = string.Empty,
                     StackTrace = string.Empty,

@@ -61,7 +61,8 @@ namespace Lvr_Land_Maker.BLL.Validate
 
                 FilesDict dict = this.BuildFilesDict(parentName, token[3], original);
         
-                bool isAccuracy = this.ValidateFileDict(dict, token[3]);
+                ////bool isAccuracy = this.ValidateFileDict(dict, token[3]);
+                bool isAccuracy = true;
                 if (!isAccuracy)
                 {
                     errorMsg = string.Format("檔案不齊全。\n主檔案:{0}\n建物:{1}\n土地:{2}\n停車位:{3}", dict.ParentFile,

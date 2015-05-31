@@ -39,10 +39,44 @@ namespace Lvr_Land_Maker.BLL.Insert
             if (detail.BusinessModel != null)
             {
                 state = this.InsertBusinessModel(detail.BusinessModel);
+                if (state == -1)
+                {
+                    errorMsg = "錯誤發生於[InsertBusinessModel] / " + detail.ParentFileName;
+                    return state;
+                }
 
+                if (detail.BuildModel != null && detail.BuildModel.Count > 0)
+                {
+                    state = this.InsertBuildModel(detail.BuildModel);
+                    if (state == -1)
+                    {
+                        errorMsg = "錯誤發生於[InsertBuildModel] / " + detail.BuildFileName;
+                        return state;
+                    }
+                }
+
+                if (detail.LandModel != null && detail.LandModel.Count > 0)
+                {
+                    state = this.InsertLandModel(detail.LandModel);
+                    if (state == -1)
+                    {
+                        errorMsg = "錯誤發生於[InsertLandModel] / " + detail.LandFileName;
+                        return state;
+                    }
+                }
+
+                if (detail.ParkModel != null && detail.ParkModel.Count > 0)
+                {
+                    state = this.InsertParkModel(detail.ParkModel);
+                    if (state == -1)
+                    {
+                        errorMsg = "錯誤發生於[InsertParkModel] / " + detail.ParkFileName;
+                        return state;
+                    }
+                }
             }
 
-            return -1;
+            return 1;
         }
 
         private int InsertBusinessModel(List<BusinessModel> model)
@@ -126,11 +160,140 @@ namespace Lvr_Land_Maker.BLL.Insert
             return source.Rows.Count;
         }
 
+        private int InsertBuildModel(List<LvrBuildModel> model)
+        {
+            DataTable source = FrameworkLibrary.DataAccess.Helper.DataTableHelper.ConvertToDataTable<LvrBuildModel>(model);
+
+            if (source == null)
+            {
+                return -1;
+            }
+
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = ConfigurationManager.ConnectionStrings["Tong"].ConnectionString;
+                conn.Open();
+                using (SqlBulkCopy sqlBC = new SqlBulkCopy(conn))
+                {
+                    //設定一個批次量寫入多少筆資料 
+                    sqlBC.BatchSize = 1000;
+                    //設定逾時的秒數 
+                    sqlBC.BulkCopyTimeout = 60;
+
+                    //設定 NotifyAfter 屬性，以便在每複製 10000 個資料列至資料表後，呼叫事件處理常式。 
+                    sqlBC.NotifyAfter = 10000;
+                    sqlBC.SqlRowsCopied += new SqlRowsCopiedEventHandler(OnSqlRowsCopied);
+
+                    //設定要寫入的資料庫 
+                    sqlBC.DestinationTableName = "dbo.LvrLandBuild";
+
+                    //對應資料行 
+                    sqlBC.ColumnMappings.Add("Number", "Number");
+                    sqlBC.ColumnMappings.Add("Year", "Year");
+                    sqlBC.ColumnMappings.Add("SquareMeter", "SquareMeter");
+                    sqlBC.ColumnMappings.Add("LevelGround", "LevelGround");
+                    sqlBC.ColumnMappings.Add("BuildsType", "BuildsType");
+                    sqlBC.ColumnMappings.Add("Materials", "Materials");
+                    sqlBC.ColumnMappings.Add("CompletedDate", "CompletedDate");
+                    sqlBC.ColumnMappings.Add("AllFloors", "AllFloors");
+                    sqlBC.ColumnMappings.Add("BuildPartitioned", "BuildPartitioned");
+                    
+
+                    //開始寫入 
+                    sqlBC.WriteToServer(source);
+                }
+            }
+
+            return source.Rows.Count;
+        }
+
+        private int InsertLandModel(List<LvrLandModel> model)
+        {
+            DataTable source = FrameworkLibrary.DataAccess.Helper.DataTableHelper.ConvertToDataTable<LvrLandModel>(model);
+
+            if (source == null)
+            {
+                return -1;
+            }
+
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = ConfigurationManager.ConnectionStrings["Tong"].ConnectionString;
+                conn.Open();
+                using (SqlBulkCopy sqlBC = new SqlBulkCopy(conn))
+                {
+                    //設定一個批次量寫入多少筆資料 
+                    sqlBC.BatchSize = 1000;
+                    //設定逾時的秒數 
+                    sqlBC.BulkCopyTimeout = 60;
+
+                    //設定 NotifyAfter 屬性，以便在每複製 10000 個資料列至資料表後，呼叫事件處理常式。 
+                    sqlBC.NotifyAfter = 10000;
+                    sqlBC.SqlRowsCopied += new SqlRowsCopiedEventHandler(OnSqlRowsCopied);
+
+                    //設定要寫入的資料庫 
+                    sqlBC.DestinationTableName = "dbo.LvrLandLand";
+
+                    //對應資料行 
+                    sqlBC.ColumnMappings.Add("Number", "Number");
+                    sqlBC.ColumnMappings.Add("LandSection", "LandSection");
+                    sqlBC.ColumnMappings.Add("SquareMeter", "SquareMeter");
+                    sqlBC.ColumnMappings.Add("LevelGround", "LevelGround");
+                    sqlBC.ColumnMappings.Add("Subject", "Subject");
+
+                    //開始寫入 
+                    sqlBC.WriteToServer(source);
+                }
+            }
+
+            return source.Rows.Count;
+        }
+
+        private int InsertParkModel(List<LvrParkModel> model)
+        {
+            DataTable source = FrameworkLibrary.DataAccess.Helper.DataTableHelper.ConvertToDataTable<LvrParkModel>(model);
+
+            if (source == null)
+            {
+                return -1;
+            }
+
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = ConfigurationManager.ConnectionStrings["Tong"].ConnectionString;
+                conn.Open();
+                using (SqlBulkCopy sqlBC = new SqlBulkCopy(conn))
+                {
+                    //設定一個批次量寫入多少筆資料 
+                    sqlBC.BatchSize = 1000;
+                    //設定逾時的秒數 
+                    sqlBC.BulkCopyTimeout = 60;
+
+                    //設定 NotifyAfter 屬性，以便在每複製 10000 個資料列至資料表後，呼叫事件處理常式。 
+                    sqlBC.NotifyAfter = 10000;
+                    sqlBC.SqlRowsCopied += new SqlRowsCopiedEventHandler(OnSqlRowsCopied);
+
+                    //設定要寫入的資料庫 
+                    sqlBC.DestinationTableName = "dbo.LvrLandPark";
+
+                    //對應資料行 
+                    sqlBC.ColumnMappings.Add("Number", "Number");
+                    sqlBC.ColumnMappings.Add("Cost", "Cost");
+                    sqlBC.ColumnMappings.Add("SquareMeter", "SquareMeter");
+                    sqlBC.ColumnMappings.Add("LevelGround", "LevelGround");
+                    sqlBC.ColumnMappings.Add("ParkType", "ParkType");
+
+                    //開始寫入 
+                    sqlBC.WriteToServer(source);
+                }
+            }
+
+            return source.Rows.Count;
+        }
+
         private static void OnSqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
         {
             ////
         }
-
-
     }
 }

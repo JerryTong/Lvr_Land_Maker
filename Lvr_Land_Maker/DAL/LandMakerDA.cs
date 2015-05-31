@@ -40,6 +40,48 @@ namespace Lvr_Land_Maker.DAL
         }
 
         /// <summary>
+        /// 獲取建物資料
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static List<LvrBuildModel> GetLvrBuildModel(string path)
+        {
+            DataTable dt = FrameworkLibrary.DataAccess.XmlDataAccess.LoadDataTable(path);
+            var result = FrameworkLibrary.DataAccess.Helper.DataTableHelper.DataTableToList<LvrBuildModel>(dt);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 獲取土地資料
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static List<LvrLandModel> GetLvrLandModel(string path)
+        {
+            DataTable dt = FrameworkLibrary.DataAccess.XmlDataAccess.LoadDataTable(path);
+            var result = FrameworkLibrary.DataAccess.Helper.DataTableHelper.DataTableToList<LvrLandModel>(dt);
+
+            return result;
+        }
+
+        /// <summary>
+        /// 獲取停車資料
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static List<LvrParkModel> GetLvrParkModel(string path)
+        {
+            ////將資料倒入DataTable
+            DataTable dt = FrameworkLibrary.DataAccess.XmlDataAccess.LoadDataTable(path);
+
+            ////將DataTable資料映射入BsuinessModel
+            var result = FrameworkLibrary.DataAccess.Helper.DataTableHelper.DataTableToList<LvrParkModel>(dt);
+
+            return result;
+        }
+
+        /// <summary>
         /// 取得指定路徑之內政部實價登錄資料。
         /// </summary>
         /// <param name="path"></param>
