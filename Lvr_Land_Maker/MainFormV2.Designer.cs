@@ -35,12 +35,12 @@
             this.selectMoreFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.工具ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UpdateAttributeconfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.同步至正式環境ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AsyncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.同步至正式環境ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.AsyncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -94,6 +94,21 @@
             this.UpdateAttributeconfigToolStripMenuItem.Text = "更新Attribute.config";
             this.UpdateAttributeconfigToolStripMenuItem.Click += new System.EventHandler(this.UpdateAttributeconfigToolStripMenuItem_Click);
             // 
+            // 同步至正式環境ToolStripMenuItem
+            // 
+            this.同步至正式環境ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AsyncToolStripMenuItem});
+            this.同步至正式環境ToolStripMenuItem.Name = "同步至正式環境ToolStripMenuItem";
+            this.同步至正式環境ToolStripMenuItem.Size = new System.Drawing.Size(116, 20);
+            this.同步至正式環境ToolStripMenuItem.Text = "@同步至正式環境";
+            // 
+            // AsyncToolStripMenuItem
+            // 
+            this.AsyncToolStripMenuItem.Name = "AsyncToolStripMenuItem";
+            this.AsyncToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.AsyncToolStripMenuItem.Text = "同步";
+            this.AsyncToolStripMenuItem.Click += new System.EventHandler(this.AsyncToolStripMenuItem_Click);
+            // 
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.SystemColors.Info;
@@ -111,7 +126,7 @@
             // 
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.progressBar1.Location = new System.Drawing.Point(0, 575);
-            this.progressBar1.MarqueeAnimationSpeed = 0;
+            this.progressBar1.MarqueeAnimationSpeed = 10;
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(1084, 24);
             this.progressBar1.Step = 30;
@@ -134,21 +149,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
-            // 
-            // 同步至正式環境ToolStripMenuItem
-            // 
-            this.同步至正式環境ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AsyncToolStripMenuItem});
-            this.同步至正式環境ToolStripMenuItem.Name = "同步至正式環境ToolStripMenuItem";
-            this.同步至正式環境ToolStripMenuItem.Size = new System.Drawing.Size(116, 20);
-            this.同步至正式環境ToolStripMenuItem.Text = "@同步至正式環境";
-            // 
-            // AsyncToolStripMenuItem
-            // 
-            this.AsyncToolStripMenuItem.Name = "AsyncToolStripMenuItem";
-            this.AsyncToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.AsyncToolStripMenuItem.Text = "同步";
-            this.AsyncToolStripMenuItem.Click += new System.EventHandler(this.AsyncToolStripMenuItem_Click);
             // 
             // MainFormV2
             // 

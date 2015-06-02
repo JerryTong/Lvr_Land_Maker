@@ -61,5 +61,16 @@ namespace Lvr_Land_Maker.Models
         /// </summary>
         [XmlElement("建物分層")]
         public int BuildPartitioned { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string EditDateTime
+        {
+            get
+            {
+                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            }
+        }
     }
 }

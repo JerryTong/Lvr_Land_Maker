@@ -37,5 +37,16 @@ namespace Lvr_Land_Maker.Models
         /// </summary>
         [XmlElement("車位類別")]
         public string ParkType { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string EditDateTime
+        {
+            get
+            {
+                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            }
+        }
     }
 }

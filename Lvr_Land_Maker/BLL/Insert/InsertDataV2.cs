@@ -197,7 +197,7 @@ namespace Lvr_Land_Maker.BLL.Insert
                     sqlBC.ColumnMappings.Add("CompletedDate", "CompletedDate");
                     sqlBC.ColumnMappings.Add("AllFloors", "AllFloors");
                     sqlBC.ColumnMappings.Add("BuildPartitioned", "BuildPartitioned");
-                    
+                    sqlBC.ColumnMappings.Add("EditDateTime", "EditDateTime");
 
                     //開始寫入 
                     sqlBC.WriteToServer(source);
@@ -240,6 +240,7 @@ namespace Lvr_Land_Maker.BLL.Insert
                     sqlBC.ColumnMappings.Add("SquareMeter", "SquareMeter");
                     sqlBC.ColumnMappings.Add("LevelGround", "LevelGround");
                     sqlBC.ColumnMappings.Add("Subject", "Subject");
+                    sqlBC.ColumnMappings.Add("EditDateTime", "EditDateTime");
 
                     //開始寫入 
                     sqlBC.WriteToServer(source);
@@ -282,6 +283,7 @@ namespace Lvr_Land_Maker.BLL.Insert
                     sqlBC.ColumnMappings.Add("SquareMeter", "SquareMeter");
                     sqlBC.ColumnMappings.Add("LevelGround", "LevelGround");
                     sqlBC.ColumnMappings.Add("ParkType", "ParkType");
+                    sqlBC.ColumnMappings.Add("EditDateTime", "EditDateTime");
 
                     //開始寫入 
                     sqlBC.WriteToServer(source);

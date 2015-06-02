@@ -37,5 +37,16 @@ namespace Lvr_Land_Maker.Models
         /// </summary>
         [XmlElement("使用分區或編定")]
         public string Subject { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string EditDateTime
+        {
+            get
+            {
+                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            }
+        }
     }
 }
