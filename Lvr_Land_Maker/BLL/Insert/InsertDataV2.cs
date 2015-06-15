@@ -1,4 +1,5 @@
 ﻿using Lvr_Land_Maker.Models;
+using Lvr_Land_Maker.Models.Configuartion;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -38,7 +39,7 @@ namespace Lvr_Land_Maker.BLL.Insert
             int state = -1;
             if (detail.BusinessModel != null)
             {
-                state = this.InsertBusinessModel(detail.BusinessModel);
+                state = this.InsertBusinessModel(detail.BusinessModel, false);
                 if (state == -1)
                 {
                     errorMsg = "錯誤發生於[InsertBusinessModel] / " + detail.ParentFileName;
@@ -47,7 +48,7 @@ namespace Lvr_Land_Maker.BLL.Insert
 
                 if (detail.BuildModel != null && detail.BuildModel.Count > 0)
                 {
-                    state = this.InsertBuildModel(detail.BuildModel);
+                    state = this.InsertBuildModel(detail.BuildModel, false);
                     if (state == -1)
                     {
                         errorMsg = "錯誤發生於[InsertBuildModel] / " + detail.BuildFileName;
@@ -57,7 +58,7 @@ namespace Lvr_Land_Maker.BLL.Insert
 
                 if (detail.LandModel != null && detail.LandModel.Count > 0)
                 {
-                    state = this.InsertLandModel(detail.LandModel);
+                    state = this.InsertLandModel(detail.LandModel, false);
                     if (state == -1)
                     {
                         errorMsg = "錯誤發生於[InsertLandModel] / " + detail.LandFileName;
@@ -67,7 +68,7 @@ namespace Lvr_Land_Maker.BLL.Insert
 
                 if (detail.ParkModel != null && detail.ParkModel.Count > 0)
                 {
-                    state = this.InsertParkModel(detail.ParkModel);
+                    state = this.InsertParkModel(detail.ParkModel, false);
                     if (state == -1)
                     {
                         errorMsg = "錯誤發生於[InsertParkModel] / " + detail.ParkFileName;
@@ -79,7 +80,7 @@ namespace Lvr_Land_Maker.BLL.Insert
             return 1;
         }
 
-        private int InsertBusinessModel(List<BusinessModel> model)
+        private int InsertBusinessModel(List<BusinessModel> model, bool isProduction)
         {
             DataTable source = FrameworkLibrary.DataAccess.Helper.DataTableHelper.ConvertToDataTable<BusinessModel>(model);
 
@@ -104,8 +105,8 @@ namespace Lvr_Land_Maker.BLL.Insert
                     sqlBC.SqlRowsCopied += new SqlRowsCopiedEventHandler(OnSqlRowsCopied);
 
                     //設定要寫入的資料庫 
-                    sqlBC.DestinationTableName = "dbo.LvrLandOriginalBaseTest";
-
+                    ////sqlBC.DestinationTableName = isProduction ? "dbo.LvrLandOriginalBase" : "dbo.LvrLandOriginalBaseTest";
+                    sqlBC.DestinationTableName = isProduction ? AppConfigManager.Current.LvrLandOriginalBase : AppConfigManager.Current.TestLvrLandOriginalBase;
                     //對應資料行 
                     sqlBC.ColumnMappings.Add("ObjectNumber", "ObjectNumber");
                     sqlBC.ColumnMappings.Add("SaleType", "SaleType");
@@ -160,7 +161,7 @@ namespace Lvr_Land_Maker.BLL.Insert
             return source.Rows.Count;
         }
 
-        private int InsertBuildModel(List<LvrBuildModel> model)
+        private int InsertBuildModel(List<LvrBuildModel> model, bool isProduction)
         {
             DataTable source = FrameworkLibrary.DataAccess.Helper.DataTableHelper.ConvertToDataTable<LvrBuildModel>(model);
 
@@ -185,7 +186,8 @@ namespace Lvr_Land_Maker.BLL.Insert
                     sqlBC.SqlRowsCopied += new SqlRowsCopiedEventHandler(OnSqlRowsCopied);
 
                     //設定要寫入的資料庫 
-                    sqlBC.DestinationTableName = "dbo.LvrLandBuild";
+                    ////sqlBC.DestinationTableName = isProduction ? "dbo.LvrLandBuild" : "dbo.LvrLandBuildTest";
+                    sqlBC.DestinationTableName = isProduction ? AppConfigManager.Current.BuildTableName : AppConfigManager.Current.TestBuildTableName;
 
                     //對應資料行 
                     sqlBC.ColumnMappings.Add("Number", "Number");
@@ -207,7 +209,7 @@ namespace Lvr_Land_Maker.BLL.Insert
             return source.Rows.Count;
         }
 
-        private int InsertLandModel(List<LvrLandModel> model)
+        private int InsertLandModel(List<LvrLandModel> model, bool isProduction)
         {
             DataTable source = FrameworkLibrary.DataAccess.Helper.DataTableHelper.ConvertToDataTable<LvrLandModel>(model);
 
@@ -232,7 +234,7 @@ namespace Lvr_Land_Maker.BLL.Insert
                     sqlBC.SqlRowsCopied += new SqlRowsCopiedEventHandler(OnSqlRowsCopied);
 
                     //設定要寫入的資料庫 
-                    sqlBC.DestinationTableName = "dbo.LvrLandLand";
+                    sqlBC.DestinationTableName = isProduction ? AppConfigManager.Current.LandTableName : AppConfigManager.Current.TestLandTableName;
 
                     //對應資料行 
                     sqlBC.ColumnMappings.Add("Number", "Number");
@@ -250,7 +252,7 @@ namespace Lvr_Land_Maker.BLL.Insert
             return source.Rows.Count;
         }
 
-        private int InsertParkModel(List<LvrParkModel> model)
+        private int InsertParkModel(List<LvrParkModel> model, bool isProduction)
         {
             DataTable source = FrameworkLibrary.DataAccess.Helper.DataTableHelper.ConvertToDataTable<LvrParkModel>(model);
 
@@ -275,7 +277,7 @@ namespace Lvr_Land_Maker.BLL.Insert
                     sqlBC.SqlRowsCopied += new SqlRowsCopiedEventHandler(OnSqlRowsCopied);
 
                     //設定要寫入的資料庫 
-                    sqlBC.DestinationTableName = "dbo.LvrLandPark";
+                    sqlBC.DestinationTableName = isProduction ? AppConfigManager.Current.ParkTableName : AppConfigManager.Current.TestParkTableName;
 
                     //對應資料行 
                     sqlBC.ColumnMappings.Add("Number", "Number");

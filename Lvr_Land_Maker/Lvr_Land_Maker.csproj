@@ -79,6 +79,7 @@
       <DependentUpon>MainFormV2.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\BusinessModel.cs" />
+    <Compile Include="Models\Configuartion\AppConfigManager.cs" />
     <Compile Include="Models\Configuartion\AttributeConfigManager.cs" />
     <Compile Include="Models\Configuartion\CheckDataConfigManager.cs" />
     <Compile Include="Models\Configuartion\DataCommandManager.cs" />
