@@ -72,9 +72,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainFormV2.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="MainFormV2.cs" />
     <Compile Include="MainFormV2.Designer.cs">
       <DependentUpon>MainFormV2.cs</DependentUpon>
     </Compile>
@@ -138,6 +136,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="SourceData\2015S3.zip" />
+    <None Include="SourceData\r_language.pdf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
