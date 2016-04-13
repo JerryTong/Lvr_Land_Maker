@@ -136,7 +136,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="SourceData\2015S3.zip" />
-    <None Include="SourceData\r_language.pdf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
